@@ -1,8 +1,16 @@
 {
-  "$schema": "https://json.schemastore.org/prettierrc",
-  "semi": false,
-  "tabWidth": 2,
-  "singleQuote": true,
+  "$schema": "http://json.schemastore.org/prettierrc",
   "printWidth": 100,
-  "trailingComma": "none"
+  "semi": false,
+  "useTabs": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": ["*.json", "*rc"],
+      "options": {
+        "useTabs": false
+      }
+    }
+  ]
 }
