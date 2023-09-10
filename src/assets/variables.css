@@ -1,0 +1,14 @@
+:root {
+	--pt-border-radius: 12px;
+	--pt-margin: 16px;
+
+	/*MAIN COLORS*/
+	--pt-lighter-grey: #f4f4f4;
+	--pt-light-grey: #e3e3e3;
+	--pt-grey: #d3d3d3;
+	--pt-dark-grey: #545f71;
+	--pt-blue: #2f80ed;
+	--pt-darker-blue: #1967cf;
+	--pt-darkest-blue: #135ab9;
+	--pt-soft-black: #383838;
+}
