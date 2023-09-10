@@ -9,7 +9,8 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "format:check": "npx prettier --check \"{**/*,*}.{js,ts,jsx,tsx,vue,css,json}\""
   },
   "dependencies": {
     "vue": "^3.3.4",
