@@ -1,6 +1,7 @@
 :root {
 	--pt-border-radius: 12px;
 	--pt-margin: 16px;
+	--pt-font-family: 'Manrope', system-ui, 'SF Pro Display', Roboto, Oxygen, Arial, sans-serif;
 
 	/*MAIN COLORS*/
 	--pt-lighter-grey: #f4f4f4;
