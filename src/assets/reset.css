@@ -19,8 +19,7 @@ body {
 img,
 picture,
 video,
-canvas,
-svg {
+canvas {
 	display: block;
 	max-width: 100%;
 }
@@ -36,4 +35,11 @@ ol,
 ul,
 menu {
 	list-style: none;
+}
+
+button {
+	padding: 0;
+	border: none;
+	background: none;
+	cursor: pointer;
 }
