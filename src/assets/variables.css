@@ -2,12 +2,15 @@
 	--pt-border-radius: 12px;
 	--pt-margin: 16px;
 	--pt-font-family: 'Manrope', system-ui, 'SF Pro Display', Roboto, Oxygen, Arial, sans-serif;
+	--pt-text-color: var(--pt-soft-black);
+	--pt-popup-box-shadow: 0px 4px 12px -3px rgba(0, 0, 0, 0.15);
 
 	/*MAIN COLORS*/
 	--pt-lighter-grey: #f4f4f4;
 	--pt-light-grey: #e3e3e3;
 	--pt-grey: #d3d3d3;
 	--pt-dark-grey: #545f71;
+	--pt-pastel-blue: #edf5ff;
 	--pt-blue: #2f80ed;
 	--pt-darker-blue: #1967cf;
 	--pt-darkest-blue: #135ab9;
