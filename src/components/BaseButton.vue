@@ -5,14 +5,13 @@ defineProps<{
 	action: Function
 	background: 'light' | 'colored'
 	iconName?: string
-	text?: string
 }>()
 </script>
 
 <template>
 	<button :class="[$style['base-button'], $style[`base-button_${background}`]]" @click="action()">
 		<Icon v-if="iconName" :name="iconName" />
-		<span v-if="text" :class="$style['base-button__text']">{{ text }}</span>
+		<slot></slot>
 	</button>
 </template>
 
@@ -20,17 +19,15 @@ defineProps<{
 .base-button {
 	display: inline-flex;
 	align-items: center;
+	gap: 4px;
 	padding: 8px;
-	border-radius: var(--pt-border-radius);
-	vertical-align: middle;
-	transition: background-color 0.2s;
-}
-
-.base-button__text {
 	margin-left: 4px;
+	vertical-align: middle;
 	font-weight: 800;
 	font-size: 13px;
 	text-align: center;
+	border-radius: var(--pt-border-radius);
+	transition: background-color 0.2s;
 }
 
 /* Light button */
