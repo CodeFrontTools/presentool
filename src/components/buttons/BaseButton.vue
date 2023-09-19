@@ -3,13 +3,21 @@ import Icon from '../BaseIcon.vue'
 
 defineProps<{
 	action: (args: any) => void
-	background: 'light' | 'colored'
+	style: 'light' | 'colored'
+	disabled?: boolean
 	iconName?: string
 }>()
 </script>
 
 <template>
-	<button :class="[$style['base-button'], $style[`base-button_${background}`]]" @click="action">
+	<button
+		:class="[
+			$style['base-button'],
+			$style[`base-button_${style}`],
+			$style[`base-button_${disabled && 'disabled'}`],
+		]"
+		@click="!disabled && action"
+	>
 		<Icon v-if="iconName" :name="iconName" />
 		<slot></slot>
 	</button>
@@ -37,11 +45,11 @@ defineProps<{
 	fill: var(--pt-blue);
 }
 
-.base-button_light:hover {
+.base-button_light:not(.base-button_disabled):hover {
 	background-color: var(--pt-light-grey);
 }
 
-.base-button_light:active {
+.base-button_light:not(.base-button_disabled):active {
 	box-shadow: inset 0 0 0 1px var(--pt-grey);
 }
 
@@ -52,11 +60,17 @@ defineProps<{
 	fill: #fff;
 }
 
-.base-button_colored:hover {
+.base-button_colored:not(.base-button_disabled):hover {
 	background-color: var(--pt-darker-blue);
 }
 
-.base-button_colored:active {
+.base-button_colored:not(.base-button_disabled):active {
 	box-shadow: inset 0 0 0 1px var(--pt-darkest-blue);
+}
+
+/* Disabled button */
+.base-button_disabled {
+	opacity: 0.5;
+	cursor: default;
 }
 </style>
