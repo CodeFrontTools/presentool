@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import Icon from './BaseIcon.vue'
+
 defineProps<{
-	iconComponent?: object
-	text?: string
 	action: Function
 	background: 'light' | 'colored'
+	iconName?: string
+	text?: string
 }>()
 </script>
 
 <template>
-	<button :class="[$style['base-button'], $style[`_${background}`]]" @click="action()">
-		<component v-if="iconComponent" :is="iconComponent" style="width: 16px; height: 16px" />
+	<button :class="[$style['base-button'], $style[`base-button_${background}`]]" @click="action()">
+		<Icon v-if="iconName" :name="iconName" />
 		<span v-if="text" :class="$style['base-button__text']">{{ text }}</span>
 	</button>
 </template>
@@ -32,32 +34,32 @@ defineProps<{
 }
 
 /* Light button */
-.base-button._light {
+.base-button_light {
 	background-color: var(--pt-lighter-grey);
 	color: var(--pt-blue);
 	fill: var(--pt-blue);
 }
 
-.base-button._light:hover {
+.base-button_light:hover {
 	background-color: var(--pt-light-grey);
 }
 
-.base-button._light:active {
+.base-button_light:active {
 	box-shadow: inset 0 0 0 1px var(--pt-grey);
 }
 
 /* Colored button */
-.base-button._colored {
+.base-button_colored {
 	background-color: var(--pt-blue);
 	color: #fff;
 	fill: #fff;
 }
 
-.base-button._colored:hover {
+.base-button_colored:hover {
 	background-color: var(--pt-darker-blue);
 }
 
-.base-button._colored:active {
+.base-button_colored:active {
 	box-shadow: inset 0 0 0 1px var(--pt-darkest-blue);
 }
 </style>
