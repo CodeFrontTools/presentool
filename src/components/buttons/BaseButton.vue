@@ -2,14 +2,14 @@
 import Icon from '../BaseIcon.vue'
 
 defineProps<{
-	action: Function
+	action: (args: any) => void
 	background: 'light' | 'colored'
 	iconName?: string
 }>()
 </script>
 
 <template>
-	<button :class="[$style['base-button'], $style[`base-button_${background}`]]" @click="action()">
+	<button :class="[$style['base-button'], $style[`base-button_${background}`]]" @click="action">
 		<Icon v-if="iconName" :name="iconName" />
 		<slot></slot>
 	</button>
