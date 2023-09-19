@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Icon from './BaseIcon.vue'
+import Icon from '../BaseIcon.vue'
 
 defineProps<{
 	action: Function
