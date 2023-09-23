@@ -11,12 +11,9 @@ defineProps<{
 
 <template>
 	<button
-		:class="[
-			$style['base-button'],
-			$style[`base-button_${style}`],
-			$style[`base-button_${disabled && 'disabled'}`],
-		]"
-		@click="!disabled && action"
+		:class="[$style['base-button'], $style[`base-button_${style}`]]"
+		:disabled="disabled"
+		@click="action"
 	>
 		<Icon v-if="iconName" :name="iconName" />
 		<slot></slot>
@@ -29,7 +26,6 @@ defineProps<{
 	align-items: center;
 	gap: 4px;
 	padding: 8px;
-	margin-left: 4px;
 	vertical-align: middle;
 	font-weight: 800;
 	font-size: 13px;
@@ -45,11 +41,11 @@ defineProps<{
 	fill: var(--pt-blue);
 }
 
-.base-button_light:not(.base-button_disabled):hover {
+.base-button_light:not(:disabled):hover {
 	background-color: var(--pt-light-grey);
 }
 
-.base-button_light:not(.base-button_disabled):active {
+.base-button_light:not(:disabled):active {
 	box-shadow: inset 0 0 0 1px var(--pt-grey);
 }
 
@@ -60,16 +56,16 @@ defineProps<{
 	fill: #fff;
 }
 
-.base-button_colored:not(.base-button_disabled):hover {
+.base-button_colored:not(:disabled):hover {
 	background-color: var(--pt-darker-blue);
 }
 
-.base-button_colored:not(.base-button_disabled):active {
+.base-button_colored:not(:disabled):active {
 	box-shadow: inset 0 0 0 1px var(--pt-darkest-blue);
 }
 
 /* Disabled button */
-.base-button_disabled {
+.base-button:disabled {
 	opacity: 0.5;
 	cursor: default;
 }
