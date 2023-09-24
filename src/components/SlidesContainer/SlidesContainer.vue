@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import SlideItem from '@/components/SlideItems/SlideItem.vue'
+import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import type { SlideItemData } from '@/components/SlideItems/types'
-import { generateId } from '@/components/SlideItems/helpers'
+import type { SlideData } from '@/components/SlidesContainer/types'
+import { generateId } from '@/components/SlidesContainer/helpers'
 
-const slides: Ref<SlideItemData[]> = ref([
+const slides: Ref<SlideData[]> = ref([
 	{ id: '1' },
 	{ id: '2' },
 	{ id: '3' },
@@ -28,11 +28,11 @@ function addSlide() {
 	<div :class="$style.container">
 		<button @click.left="addSlide" :class="[$style.button]">+ Добавить слайд</button>
 		<div :class="$style.slidesContainer">
-			<SlideItem
+			<SlideFrame
 				v-for="(slide, index) in slides"
 				:class="[$style.slideItem]"
 				:key="slide.id"
-				:number="index + 1"
+				:slideNumber="index + 1"
 				:selected="selectedSlide === slide.id"
 				@click="selectSlide(slide.id)"
 			/>

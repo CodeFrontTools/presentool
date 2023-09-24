@@ -1,13 +1,13 @@
 <script setup lang="ts">
 defineProps<{
-	number: number
+	slideNumber: number
 	selected: boolean
 }>()
 </script>
 
 <template>
 	<div :class="[$style.container]">
-		<div :class="[$style.slideNumber]">{{ number }}</div>
+		<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
 		<div :class="[$style.miniature, selected ? $style.selected : '']"></div>
 	</div>
 </template>

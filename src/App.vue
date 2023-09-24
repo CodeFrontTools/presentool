@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SlideItems from './components/SlideItems/SlideItems.vue'
+import SlidesContainer from '@/components/SlidesContainer/SlidesContainer.vue'
 </script>
 
 <template>
-	<SlideItems />
+	<SlidesContainer />
 </template>
 
 <style module></style>
