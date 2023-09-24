@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import BaseInput from '@/components/inputs/BaseInput.vue'
+
+let projectName = ''
+function setProjectName(e: Event) {
+	const target = e.target as HTMLInputElement
+	projectName = target.value
+}
 </script>
 
 <template>
@@ -8,6 +15,12 @@ import HelloWorld from './components/HelloWorld.vue'
 		<img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
 		<div class="wrapper">
+			<BaseInput
+				placeholder="Название проекта"
+				variant="flat"
+				:on-change="setProjectName"
+				:value="projectName"
+			/>
 			<HelloWorld msg="You did it!" />
 
 			<nav>
