@@ -13,9 +13,9 @@ defineProps<{
 	<input
 		:class="[$style.input, $style[`input_${variant}`]]"
 		:disabled="disabled"
-		:placeholder="placeholder || 'Введите текст'"
+		:placeholder="placeholder || ''"
 		:value="value"
-		:type="value || 'text'"
+		:type="type || 'text'"
 		@click="onChange"
 	/>
 </template>
