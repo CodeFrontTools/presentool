@@ -27,7 +27,7 @@ function addSlide() {
 
 <template>
 	<div :class="$style.container">
-		<BaseButton icon-name="plus" :action="addSlide" :style="'light'" :class="[$style.button]"
+		<BaseButton icon-name="plus" :action="addSlide" variant="light" :class="[$style.button]"
 			>Добавить слайд</BaseButton
 		>
 		<div :class="$style.slidesContainer">

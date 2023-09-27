@@ -3,7 +3,7 @@ import Icon from '../BaseIcon.vue'
 
 defineProps<{
 	action: (args: any) => void
-	style: 'light' | 'colored'
+	variant: 'light' | 'colored'
 	disabled?: boolean
 	iconName?: string
 }>()
@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
 	<button
-		:class="[$style['base-button'], $style[`base-button_${style}`]]"
+		:class="[$style['base-button'], $style[`base-button_${variant}`]]"
 		:disabled="disabled"
 		@click="action"
 	>
