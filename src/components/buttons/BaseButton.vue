@@ -3,7 +3,7 @@ import Icon from '../BaseIcon.vue'
 
 defineProps<{
 	action: (args: any) => void
-	style: 'light' | 'colored'
+	variant: 'light' | 'colored'
 	disabled?: boolean
 	iconName?: string
 }>()
@@ -11,27 +11,33 @@ defineProps<{
 
 <template>
 	<button
-		:class="[$style['base-button'], $style[`base-button_${style}`]]"
+		:class="[$style['base-button'], $style[`base-button_${variant}`]]"
 		:disabled="disabled"
 		@click="action"
 	>
-		<Icon v-if="iconName" :name="iconName" />
-		<slot></slot>
+		<span :class="$style['base-button-container']">
+			<Icon v-if="iconName" :name="iconName" />
+			<slot></slot>
+		</span>
 	</button>
 </template>
 
 <style module>
 .base-button {
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	padding: 8px;
+	padding: 6px 8px;
 	vertical-align: middle;
 	font-weight: 800;
 	font-size: 13px;
+	line-height: 20px;
 	text-align: center;
 	border-radius: var(--pt-border-radius);
 	transition: background-color 0.2s;
+}
+
+.base-button-container {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
 }
 
 /* Light button */
