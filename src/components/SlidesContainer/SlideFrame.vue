@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import RemoveIcon from '../icons/iconRemove.vue';
+import RemoveIcon from '../icons/iconRemove.vue'
 
 type SlideItemProps = {
 	slideNumber: number
@@ -33,7 +33,6 @@ const remove = () => {
 </script>
 
 <style module scoped>
-
 .btnRemove {
 	width: 11px;
 	height: 11px;
@@ -44,7 +43,6 @@ const remove = () => {
 	display: flex;
 	justify-content: end;
 
-
 	&:hover {
 		.btnRemove {
 			transition: 0.5s;
@@ -53,8 +51,7 @@ const remove = () => {
 	}
 }
 
-
-.wrapper{
+.wrapper {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -76,8 +73,6 @@ const remove = () => {
 	border: 1px solid var(--pt-light-grey);
 	border-radius: var(--pt-border-radius);
 }
-
-
 
 .selected {
 	border: 2px solid var(--pt-blue);
