@@ -8,24 +8,22 @@
 </template>
 
 <script setup lang="ts">
-
-type SlideItemProps = 	{
-	slideNumber: number,
-	slideIndex: string,
-	selected: boolean,
+type SlideItemProps = {
+	slideNumber: number
+	slideIndex: string
+	selected: boolean
 }
 
 type SlideItemEmits = {
 	remove: [id: string]
 }
 
-const props = defineProps<SlideItemProps>();
-const emits = defineEmits<SlideItemEmits>();
+const props = defineProps<SlideItemProps>()
+const emits = defineEmits<SlideItemEmits>()
 
 const remove = () => {
-	emits('remove', props.slideIndex);
+	emits('remove', props.slideIndex)
 }
-
 </script>
 
 <style module scoped>

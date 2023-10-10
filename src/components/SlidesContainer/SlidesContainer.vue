@@ -24,23 +24,23 @@ function addSlide() {
 }
 
 const removeSlide = (id: string) => {
-	const slideIndex = slides.value.findIndex(item => item.id === id);
-	slides.value.splice(slideIndex, 1);
+	const slideIndex = slides.value.findIndex((item) => item.id === id)
+	slides.value.splice(slideIndex, 1)
 }
-
 </script>
 
 <template>
 	<div :class="$style.container">
 		<BaseButton icon-name="plus" :action="addSlide" variant="light" :class="[$style.button]">
-			Добавить слайд</BaseButton>
+			Добавить слайд</BaseButton
+		>
 		<div :class="$style.slidesContainer">
 			<SlideFrame
 				v-for="(slide, index) in slides"
 				:class="[$style.slideItem]"
 				:key="slide.id"
 				:slide-index="slide.id"
-				:slideNumber="index+1"
+				:slideNumber="index + 1"
 				:selected="selectedSlide === slide.id"
 				@click="selectSlide(slide.id)"
 				@remove="removeSlide"
