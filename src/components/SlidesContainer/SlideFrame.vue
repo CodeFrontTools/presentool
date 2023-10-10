@@ -1,13 +1,19 @@
 <template>
-	<div :class="[$style.container]">
-		<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
-		<div :class="[$style.miniature, selected ? $style.selected : '']">
-			<button :class="[$style.btnRemove]" @click="remove">Remove</button>
+	<div :class="[$style.containerSlide]">
+		<div :class="[$style.wrapper]">
+			<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
+			<button :class="[$style.btnRemove]" @click="remove">
+				<RemoveIcon />
+			</button>
 		</div>
+
+		<div :class="[$style.miniature, selected ? $style.selected : '']"></div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import RemoveIcon from '../icons/iconRemove.vue';
+
 type SlideItemProps = {
 	slideNumber: number
 	slideIndex: string
@@ -27,9 +33,31 @@ const remove = () => {
 </script>
 
 <style module scoped>
-.container {
+
+.btnRemove {
+	width: 11px;
+	height: 11px;
+	opacity: 0;
+}
+
+.containerSlide {
 	display: flex;
 	justify-content: end;
+
+
+	&:hover {
+		.btnRemove {
+			transition: 0.5s;
+			opacity: 1;
+		}
+	}
+}
+
+
+.wrapper{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .slideNumber {
@@ -49,11 +77,7 @@ const remove = () => {
 	border-radius: var(--pt-border-radius);
 }
 
-.btnRemove {
-	background-color: aqua;
-	width: 34px;
-	height: 34px;
-}
+
 
 .selected {
 	border: 2px solid var(--pt-blue);
