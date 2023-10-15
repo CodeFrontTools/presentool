@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import type { Slide, SlideElement } from '../types'
+import type { Ref } from 'vue'
+import type { Slide, SlideElement } from '@/types'
+import { DnDElements } from '@/components/DnD'
 
-const slides: Array<Slide> = [
+const slides: Ref<Array<Slide>> = ref([
 	{
 		id: 0,
-		elements: [],
+		elements: [
+			{ type: 'rectangle', area: { x: 0, y: 0, width: 100, height: 100 }, color: 'red' },
+			{ type: 'rectangle', area: { x: 50, y: 50, width: 150, height: 150 }, color: 'blue' },
+		],
 	},
-]
+])
 
 const lower = ref()
 const upper = ref()
@@ -17,9 +22,30 @@ let imageWidth: number
 let imageHeight: number
 let currentSlide = 0
 
+const DnD = new DnDElements()
+
 onMounted(() => {
 	upperCanvas = upper.value.getContext('2d')
+	DnD.init(upper.value, slides.value[currentSlide].elements, drawElements)
+	drawElements()
 })
+
+const drawElements = () => {
+	if (upperCanvas === null || upper.value === null) {
+		return
+	}
+
+	upperCanvas.clearRect(0, 0, upper.value.width, upper.value.height)
+
+	for (const element of slides.value[currentSlide].elements) {
+		if (element.type === 'rectangle') {
+			upperCanvas.fillStyle = element.color || ''
+			upperCanvas.fillRect(element.area.x, element.area.y, element.area.width, element.area.height)
+		} else if (element.type === 'image') {
+			upperCanvas.putImageData(element.content, element.area.x, element.area.y)
+		}
+	}
+}
 
 function addImage(file: File) {
 	if (!file) return
@@ -53,14 +79,14 @@ function addImage(file: File) {
 		const newSlideElement: SlideElement = {
 			type: 'image',
 			area: {
-				x1: x,
-				x2: canvasWidth - x,
-				y1: y,
-				y2: canvasHeight - y,
+				x: x,
+				y: y,
+				width: canvasWidth,
+				height: canvasHeight,
 			},
 			content: imageData,
 		}
-		slides[currentSlide].elements.push(newSlideElement)
+		slides.value[currentSlide].elements.push(newSlideElement)
 	})
 }
 
@@ -71,13 +97,13 @@ function handleCanvasClick(event: MouseEvent) {
 
 	let clickedElement: SlideElement | null = null
 
-	for (const { elements } of slides) {
+	for (const { elements } of slides.value) {
 		for (let i = elements.length - 1; i >= 0; i--) {
 			const element = elements[i]
 			const { area } = element
 			console.log('iter')
 
-			if (area.x1 <= x && x <= area.x2 && area.y1 <= y && y <= area.y2) {
+			if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
 				clickedElement = element
 				return
 			}
@@ -90,10 +116,14 @@ function handleCanvasClick(event: MouseEvent) {
 	<!-- <canvas ref="lower" :class="$style.canvas" width="700" height="400" /> -->
 	<canvas
 		ref="upper"
+		@mousedown.prevent="DnD.drag"
+		@mouseup.prevent="DnD.drop"
+		@mouseout.prevent="DnD.drop"
+		@mousemove.prevent="DnD.move"
 		:class="$style.canvas"
 		width="700"
 		height="400"
-		@click="(e) => handleCanvasClick(e)"
+		@click.prevent="(e) => handleCanvasClick(e)"
 	/>
 	<input
 		:class="'image-btn'"
