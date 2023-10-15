@@ -27,7 +27,6 @@ export class DnDElements {
 
 		for (const element of this.#elements) {
 			if (this.#isMouseInShape(this.#startDragX.value, this.#startDragY.value, element)) {
-				console.log('true', element)
 				this.#currentElementIndex.value = shapeIndex
 				this.#isDragging.value = true
 			}
@@ -72,11 +71,11 @@ export class DnDElements {
 
 	#isMouseInShape = (x: number, y: number, shape: SlideElement): boolean => {
 		const { x: shapeX, y: shapeY, height, width } = shape.area
-		const shape_left = shapeX
-		const shape_top = shapeY
-		const shape_right = shapeX + width
-		const shape_bottom = shapeY + height
+		const shapeLeft = shapeX
+		const shapeTop = shapeY
+		const shapeRight = shapeX + width
+		const shapeBottom = shapeY + height
 
-		return x > shape_left && x < shape_right && y > shape_top && y < shape_bottom
+		return x > shapeLeft && x < shapeRight && y > shapeTop && y < shapeBottom
 	}
 }
