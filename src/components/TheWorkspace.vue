@@ -14,10 +14,8 @@ const slides: Ref<Array<Slide>> = ref([
 	},
 ])
 
-const lower = ref()
-const upper = ref()
-let lowerCanvas: CanvasRenderingContext2D
-let upperCanvas: CanvasRenderingContext2D
+const canvas = ref()
+let canvasContext: CanvasRenderingContext2D
 let imageWidth: number
 let imageHeight: number
 let currentSlide = 0
@@ -25,24 +23,24 @@ let currentSlide = 0
 const DnD = new DnDElements()
 
 onMounted(() => {
-	upperCanvas = upper.value.getContext('2d')
-	DnD.init(upper.value, slides.value[currentSlide].elements, drawElements)
+	canvasContext = canvas.value.getContext('2d')
+	DnD.init(canvas.value, slides.value[currentSlide].elements, drawElements)
 	drawElements()
 })
 
 const drawElements = () => {
-	if (upperCanvas === null || upper.value === null) {
+	if (canvasContext === null || canvas.value === null) {
 		return
 	}
 
-	upperCanvas.clearRect(0, 0, upper.value.width, upper.value.height)
+	canvasContext.clearRect(0, 0, canvas.value.width, canvas.value.height)
 
 	for (const element of slides.value[currentSlide].elements) {
 		if (element.type === 'rectangle') {
-			upperCanvas.fillStyle = element.color || ''
-			upperCanvas.fillRect(element.area.x, element.area.y, element.area.width, element.area.height)
+			canvasContext.fillStyle = element.color || ''
+			canvasContext.fillRect(element.area.x, element.area.y, element.area.width, element.area.height)
 		} else if (element.type === 'image') {
-			upperCanvas.putImageData(element.content, element.area.x, element.area.y)
+			canvasContext.putImageData(element.content, element.area.x, element.area.y)
 		}
 	}
 }
@@ -50,8 +48,8 @@ const drawElements = () => {
 function addImage(file: File) {
 	if (!file) return
 
-	const canvasWidth: number = upper.value.width
-	const canvasHeight: number = upper.value.height
+	const canvasWidth: number = canvas.value.width
+	const canvasHeight: number = canvas.value.height
 
 	const image = new Image()
 	image.src = URL.createObjectURL(file)
@@ -73,25 +71,25 @@ function addImage(file: File) {
 		const x = (canvasWidth - imageWidth) / 2
 		const y = (canvasHeight - imageHeight) / 2
 
-		upperCanvas?.drawImage(image, x, y, imageWidth, imageHeight)
+		canvasContext?.drawImage(image, x, y, imageWidth, imageHeight)
 
-		const imageData = upperCanvas?.getImageData(x, y, imageWidth, imageHeight)
+		const imageData = canvasContext?.getImageData(x, y, imageWidth, imageHeight)
 		const newSlideElement: SlideElement = {
 			type: 'image',
-			area: {
-				x: x,
-				y: y,
-				width: canvasWidth,
-				height: canvasHeight,
-			},
 			content: imageData,
+			area: {
+				x,
+				y,
+				width: imageWidth,
+				height: imageHeight,
+			},
 		}
 		slides.value[currentSlide].elements.push(newSlideElement)
 	})
 }
 
 function handleCanvasClick(event: MouseEvent) {
-	const rect = upper.value.getBoundingClientRect()
+	const rect = canvas.value.getBoundingClientRect()
 	const x = event.clientX - rect.left
 	const y = event.clientY - rect.top
 
@@ -101,21 +99,27 @@ function handleCanvasClick(event: MouseEvent) {
 		for (let i = elements.length - 1; i >= 0; i--) {
 			const element = elements[i]
 			const { area } = element
-			console.log('iter')
 
 			if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
 				clickedElement = element
+				highlightElement(element)
 				return
 			}
 		}
 	}
 }
+
+function highlightElement(element: SlideElement) {
+	const { x, y, width, height } = element.area
+	const rectangle = new Path2D()
+	rectangle.rect(x - 5, y - 5, width + 10, height + 10)
+	canvasContext.stroke(rectangle)
+}
 </script>
 
 <template>
-	<!-- <canvas ref="lower" :class="$style.canvas" width="700" height="400" /> -->
 	<canvas
-		ref="upper"
+		ref="canvas"
 		@mousedown.prevent="DnD.drag"
 		@mouseup.prevent="DnD.drop"
 		@mouseout.prevent="DnD.drop"
@@ -126,7 +130,7 @@ function handleCanvasClick(event: MouseEvent) {
 		@click.prevent="(e) => handleCanvasClick(e)"
 	/>
 	<input
-		:class="'image-btn'"
+		:class="$style['image-input']"
 		type="file"
 		@change="addImage(($event.target as HTMLInputElement).files![0])"
 	/>
@@ -134,7 +138,17 @@ function handleCanvasClick(event: MouseEvent) {
 
 <style module>
 .canvas {
+	width: 700px;
+	height: 400px;
 	margin: 20px auto;
-	border: 1px solid rebeccapurple;
+	border: 1px solid #f4f4f4;
+	border-radius: 12px;
+}
+
+.image-input {
+	position: absolute;
+	right: 0;
+	bottom: 50px;
+	display: block;
 }
 </style>
