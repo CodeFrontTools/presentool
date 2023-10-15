@@ -20,7 +20,6 @@ export default class IDBStorageEngine implements KVStorageEngine<string, ObjectO
 
 		request.onsuccess = (event) => {
 			this.#db = (event.target as IDBOpenDBRequest).result
-			console.log('success')
 			this.resolver('success')
 		}
 	}
@@ -35,9 +34,11 @@ export default class IDBStorageEngine implements KVStorageEngine<string, ObjectO
 				resolve(request.result)
 			}
 
-			request.onerror = (event) => {
-				console.error(event)
-				reject(undefined)
+			request.onerror = () => {
+				console.error(
+					`An error occurred while getting data by key "${key}". Error: ${request.error}`,
+				)
+				reject(request.error)
 			}
 		})
 	}
@@ -57,7 +58,10 @@ export default class IDBStorageEngine implements KVStorageEngine<string, ObjectO
 			}
 
 			request.onerror = () => {
-				reject(`An error occurred during setting data: ${request.error}`)
+				console.error(
+					`An error occurred while setting data by key "${key}". Error: ${request.error}`,
+				)
+				reject(request.error)
 			}
 		})
 	}
@@ -69,12 +73,14 @@ export default class IDBStorageEngine implements KVStorageEngine<string, ObjectO
 
 		return new Promise((resolve, reject) => {
 			request.onsuccess = () => {
-				resolve(request.result)
+				resolve()
 			}
 
-			request.onerror = (event) => {
-				console.error(event)
-				reject(undefined)
+			request.onerror = () => {
+				console.error(
+					`An error occurred while removing data by key "${key}". Error: ${request.error}`,
+				)
+				reject(request.error)
 			}
 		})
 	}
