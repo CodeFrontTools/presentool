@@ -5,11 +5,11 @@ export type Slide = {
 
 export type SlideElement = {
 	type: 'image' | 'text'
-	area: {
-		x1: number
-		x2: number
-		y1: number
-		y2: number
-	}
 	content: ImageData | string
+	area: {
+		x: number
+		y: number
+		width: number
+		height: number
+	}
 }

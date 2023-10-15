@@ -9,23 +9,21 @@ const slides: Array<Slide> = [
 	},
 ]
 
-const lower = ref()
-const upper = ref()
-let lowerCanvas: CanvasRenderingContext2D
-let upperCanvas: CanvasRenderingContext2D
+const canvas = ref()
+let canvasContext: CanvasRenderingContext2D
 let imageWidth: number
 let imageHeight: number
 let currentSlide = 0
 
 onMounted(() => {
-	upperCanvas = upper.value.getContext('2d')
+	canvasContext = canvas.value.getContext('2d')
 })
 
 function addImage(file: File) {
 	if (!file) return
 
-	const canvasWidth: number = upper.value.width
-	const canvasHeight: number = upper.value.height
+	const canvasWidth: number = canvas.value.width
+	const canvasHeight: number = canvas.value.height
 
 	const image = new Image()
 	image.src = URL.createObjectURL(file)
@@ -47,56 +45,59 @@ function addImage(file: File) {
 		const x = (canvasWidth - imageWidth) / 2
 		const y = (canvasHeight - imageHeight) / 2
 
-		upperCanvas?.drawImage(image, x, y, imageWidth, imageHeight)
+		canvasContext?.drawImage(image, x, y, imageWidth, imageHeight)
 
-		const imageData = upperCanvas?.getImageData(x, y, imageWidth, imageHeight)
+		const imageData = canvasContext?.getImageData(x, y, imageWidth, imageHeight)
 		const newSlideElement: SlideElement = {
 			type: 'image',
-			area: {
-				x1: x,
-				x2: canvasWidth - x,
-				y1: y,
-				y2: canvasHeight - y,
-			},
 			content: imageData,
+			area: {
+				x,
+				y,
+				width: imageWidth,
+				height: imageHeight,
+			},
 		}
 		slides[currentSlide].elements.push(newSlideElement)
 	})
 }
 
 function handleCanvasClick(event: MouseEvent) {
-	const rect = upper.value.getBoundingClientRect()
+	const rect = canvas.value.getBoundingClientRect()
 	const x = event.clientX - rect.left
 	const y = event.clientY - rect.top
-
-	let clickedElement: SlideElement | null = null
 
 	for (const { elements } of slides) {
 		for (let i = elements.length - 1; i >= 0; i--) {
 			const element = elements[i]
 			const { area } = element
-			console.log('iter')
 
-			if (area.x1 <= x && x <= area.x2 && area.y1 <= y && y <= area.y2) {
-				clickedElement = element
+			if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
+				highlightElement(element)
 				return
 			}
 		}
 	}
 }
+
+function highlightElement(element: SlideElement) {
+	const { x, y, width, height } = element.area
+	const rectangle = new Path2D()
+	rectangle.rect(x - 5, y - 5, width + 10, height + 10)
+	canvasContext.stroke(rectangle)
+}
 </script>
 
 <template>
-	<!-- <canvas ref="lower" :class="$style.canvas" width="700" height="400" /> -->
 	<canvas
-		ref="upper"
+		ref="canvas"
 		:class="$style.canvas"
 		width="700"
 		height="400"
 		@click="(e) => handleCanvasClick(e)"
 	/>
 	<input
-		:class="'image-btn'"
+		:class="$style['image-input']"
 		type="file"
 		@change="addImage(($event.target as HTMLInputElement).files![0])"
 	/>
@@ -104,7 +105,17 @@ function handleCanvasClick(event: MouseEvent) {
 
 <style module>
 .canvas {
+	width: 700px;
+	height: 400px;
 	margin: 20px auto;
-	border: 1px solid rebeccapurple;
+	border: 1px solid #f4f4f4;
+	border-radius: 12px;
+}
+
+.image-input {
+	position: absolute;
+	right: 0;
+	bottom: 50px;
+	display: block;
 }
 </style>
