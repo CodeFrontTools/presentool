@@ -51,7 +51,7 @@ const removeSlide = (id: string) => {
 
 <style module>
 .container {
-	display: flex;
+	display: inline-flex;
 	flex-direction: column;
 	overflow: auto;
 	width: 200px;
