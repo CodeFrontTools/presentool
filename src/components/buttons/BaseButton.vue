@@ -24,6 +24,8 @@ defineProps<{
 
 <style module>
 .base-button {
+	display: flex;
+	justify-content: center;
 	padding: 6px 8px;
 	vertical-align: middle;
 	font-weight: 800;
