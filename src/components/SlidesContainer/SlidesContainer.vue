@@ -62,6 +62,7 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 				:slideNumber="index + 1"
 				:name="slide.name"
 				:selected="selectedSlide === slide.id"
+				@click="selectSlide(slide.id)"
 				draggable="true"
 				@dragstart="dragStart(index, $event)"
 				@dragover.prevent
