@@ -7,12 +7,12 @@ import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
 
 const slides: Ref<SlideData[]> = ref([
-	{ id: '1', name:'str1' },
-	{ id: '2', name:'str2' },
-	{ id: '3', name:'str3' },
-	{ id: '4', name:'str4' },
-	{ id: '5', name:'str5'},
-	{ id: '6', name:'str6' },
+	{ id: '1', name: 'str1' },
+	{ id: '2', name: 'str2' },
+	{ id: '3', name: 'str3' },
+	{ id: '4', name: 'str4' },
+	{ id: '5', name: 'str5' },
+	{ id: '6', name: 'str6' },
 ])
 const selectedSlide = ref('1')
 
@@ -24,30 +24,29 @@ function addSlide() {
 	slides.value.push({ id: generateId(), name: `str${generateId()}` })
 }
 
-const dragging = ref(-1);
+const dragging = ref(-1)
 
-const dragStart = (index: number, evt: DragEvent ) =>  {
-	evt.dataTransfer!.setData('Text', index.toString());
-    evt.dataTransfer!.dropEffect = "move";
-    dragging.value = index;
+const dragStart = (index: number, evt: DragEvent) => {
+	evt.dataTransfer!.setData('Text', index.toString())
+	evt.dataTransfer!.dropEffect = 'move'
+	dragging.value = index
 }
 
-const dragEnd = () =>  {
+const dragEnd = () => {
 	dragging.value = -1
 }
 
-const moveItem = (from: number, to: number) =>  {
-    if (to === -1) return
-	  
-    slides.value.splice(to, 0, slides.value.splice(from, 1)[0]);      
+const moveItem = (from: number, to: number) => {
+	if (to === -1) return
+
+	slides.value.splice(to, 0, slides.value.splice(from, 1)[0])
 }
 
-const dragFinish = (to: number, evt: { target: HTMLInputElement; }) => {
-	moveItem(dragging.value, to);
-    evt.target!.style.marginTop = '2px'
-    evt.target!.style.marginBottom = '2px'
+const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
+	moveItem(dragging.value, to)
+	evt.target!.style.marginTop = '2px'
+	evt.target!.style.marginBottom = '2px'
 }
-
 </script>
 
 <template>
@@ -63,10 +62,10 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement; }) => {
 				:slideNumber="index + 1"
 				:name="slide.name"
 				:selected="selectedSlide === slide.id"
-				draggable="true" 
-				@dragstart="dragStart(index, $event)" 
-				@dragover.prevent 
-				@dragend="dragEnd" 
+				draggable="true"
+				@dragstart="dragStart(index, $event)"
+				@dragover.prevent
+				@dragend="dragEnd"
 				@drop="dragFinish(index, $event)"
 			/>
 		</div>
