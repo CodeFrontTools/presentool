@@ -2,6 +2,7 @@
 defineProps<{
 	slideNumber: number
 	selected: boolean
+	name: string
 }>()
 </script>
 
@@ -9,6 +10,7 @@ defineProps<{
 	<div :class="[$style.container]">
 		<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
 		<div :class="[$style.miniature, selected ? $style.selected : '']"></div>
+		<div>{{ name }}</div>
 	</div>
 </template>
 

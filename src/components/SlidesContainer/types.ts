@@ -1,3 +1,6 @@
 export type SlideData = {
-	id: string
+	id: string;
+
+	//TODO Временно, после добавления изображений можно удалить
+	name: string;
 }
