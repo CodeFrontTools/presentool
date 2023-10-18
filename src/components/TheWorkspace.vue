@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, type Ref } from 'vue'
 import type { Slide, SlideElement } from '../types'
 
 const slides: Array<Slide> = [
@@ -16,7 +16,7 @@ let imageHeight: number
 let currentSlide = 0
 
 onMounted(() => {
-	canvasContext = canvas.value.getContext('2d')
+	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
 })
 
 function addImage(file: File) {
@@ -82,40 +82,65 @@ function handleCanvasClick(event: MouseEvent) {
 
 function highlightElement(element: SlideElement) {
 	const { x, y, width, height } = element.area
-	const rectangle = new Path2D()
-	rectangle.rect(x - 5, y - 5, width + 10, height + 10)
-	canvasContext.stroke(rectangle)
+
+	canvasContext.fillStyle = '#1a73e8'
+	canvasContext.strokeStyle = '#1a73e8'
+	canvasContext.strokeRect(x, y, width, height)
+
+	canvasContext.strokeStyle = '#fff'
+	canvasContext.fillRect(x - 4, y - 4, 8, 8)
+	canvasContext.strokeRect(x - 4, y - 4, 8, 8)
+	canvasContext.fillRect(x + width - 4, y - 4, 8, 8)
+	canvasContext.strokeRect(x + width - 4, y - 4, 8, 8)
+	canvasContext.fillRect(x + width - 4, y + height - 4, 8, 8)
+	canvasContext.strokeRect(x + width - 4, y + height - 4, 8, 8)
+	canvasContext.fillRect(x - 4, y + height - 4, 8, 8)
+	canvasContext.strokeRect(x - 4, y + height - 4, 8, 8)
+
+	canvasContext.fillRect(x + width / 2 - 4, y - 4, 8, 8)
+	canvasContext.strokeRect(x + width / 2 - 4, y - 4, 8, 8)
+	canvasContext.fillRect(x + width - 4, y + height / 2 - 4, 8, 8)
+	canvasContext.strokeRect(x + width - 4, y + height / 2 - 4, 8, 8)
+	canvasContext.fillRect(x + width / 2 - 4, y + height - 4, 8, 8)
+	canvasContext.strokeRect(x + width / 2 - 4, y + height - 4, 8, 8)
+	canvasContext.fillRect(x - 4, y + height / 2 - 4, 8, 8)
+	canvasContext.strokeRect(x - 4, y + height / 2 - 4, 8, 8)
 }
 </script>
 
 <template>
-	<canvas
-		ref="canvas"
-		:class="$style.canvas"
-		width="700"
-		height="400"
-		@click="(e) => handleCanvasClick(e)"
-	/>
-	<input
-		:class="$style['image-input']"
-		type="file"
-		@change="addImage(($event.target as HTMLInputElement).files![0])"
-	/>
+	<div :class="$style.container">
+		<canvas
+			ref="canvas"
+			:class="$style.canvas"
+			width="700"
+			height="400"
+			@click="(e) => handleCanvasClick(e)"
+		/>
+		<input
+			:class="$style['image-input']"
+			type="file"
+			@change="addImage(($event.target as HTMLInputElement).files![0])"
+		/>
+	</div>
 </template>
 
 <style module>
+.container {
+	position: relative;
+	margin: 20px auto;
+}
+
 .canvas {
 	width: 700px;
 	height: 400px;
-	margin: 20px auto;
-	border: 1px solid #f4f4f4;
-	border-radius: 12px;
+	border: 1px solid var(--pt-light-grey);
+	border-radius: var(--pt-border-radius);
+	box-sizing: content-box;
 }
 
 .image-input {
-	position: absolute;
-	right: 0;
-	bottom: 50px;
 	display: block;
+	margin: 30px auto 0;
 }
 </style>
