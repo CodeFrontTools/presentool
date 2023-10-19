@@ -1,21 +1,60 @@
-<script setup lang="ts">
-defineProps<{
-	slideNumber: number
-	selected: boolean
-}>()
-</script>
-
 <template>
-	<div :class="[$style.container]">
-		<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
+	<div :class="[$style.containerSlide]">
+		<div :class="[$style.wrapper]">
+			<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
+			<button :class="[$style.btnRemove]" @click="remove">
+				<RemoveIcon />
+			</button>
+		</div>
+
 		<div :class="[$style.miniature, selected ? $style.selected : '']"></div>
 	</div>
 </template>
 
-<style module>
-.container {
+<script setup lang="ts">
+import RemoveIcon from '../icons/iconRemove.vue'
+
+type SlideItemProps = {
+	slideNumber: number
+	slideIndex: string
+	selected: boolean
+}
+
+type SlideItemEmits = {
+	remove: [id: string]
+}
+
+const props = defineProps<SlideItemProps>()
+const emits = defineEmits<SlideItemEmits>()
+
+const remove = () => {
+	emits('remove', props.slideIndex)
+}
+</script>
+
+<style module scoped>
+.btnRemove {
+	width: 11px;
+	height: 11px;
+	opacity: 0;
+}
+
+.containerSlide {
 	display: flex;
 	justify-content: end;
+
+	&:hover {
+		.btnRemove {
+			transition: 0.5s;
+			opacity: 1;
+		}
+	}
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .slideNumber {
@@ -27,6 +66,8 @@ defineProps<{
 .miniature {
 	width: 157px;
 	height: 92px;
+	display: flex;
+	justify-content: flex-end;
 
 	margin-left: 8px;
 	border: 1px solid var(--pt-light-grey);
