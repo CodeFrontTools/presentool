@@ -3,27 +3,24 @@ import { ref, onMounted, type Ref } from 'vue'
 import type { Slide, SlideElement } from '@/types'
 import { DnDElements } from '@/components/DnD'
 
-const slides: Ref<Array<Slide>> = ref([
-	{
-		id: 0,
-		elements: [
-			{ type: 'rectangle', area: { x: 0, y: 0, width: 100, height: 100 }, color: 'red' },
-			{ type: 'rectangle', area: { x: 50, y: 50, width: 150, height: 150 }, color: 'blue' },
-		],
-	},
-])
+const slide: Ref<Slide> = ref({
+	id: 0,
+	elements: [
+		{ type: 'rectangle', area: { x: 0, y: 0, width: 100, height: 100 }, color: 'red' },
+		{ type: 'rectangle', area: { x: 50, y: 50, width: 150, height: 150 }, color: 'blue' },
+	],
+})
 
 const canvas = ref()
 let canvasContext: CanvasRenderingContext2D
 let imageWidth: number
 let imageHeight: number
-let currentSlide = 0
 
 const DnD = new DnDElements()
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
-	DnD.init(canvas.value, slides.value[currentSlide].elements, drawElements)
+	DnD.init(canvas.value, slide.value.elements, drawElements)
 	drawElements()
 })
 
@@ -34,7 +31,7 @@ const drawElements = () => {
 
 	canvasContext.clearRect(0, 0, canvas.value.width, canvas.value.height)
 
-	for (const element of slides.value[currentSlide].elements) {
+	for (const element of slide.value.elements) {
 		if (element.type === 'rectangle') {
 			canvasContext.fillStyle = element.color || ''
 			canvasContext.fillRect(
@@ -88,7 +85,7 @@ function addImage(file: File) {
 				height: imageHeight,
 			},
 		}
-		slides.value[currentSlide].elements.push(newSlideElement)
+		slide.value.elements.push(newSlideElement)
 	})
 }
 
@@ -97,15 +94,13 @@ function handleCanvasClick(event: MouseEvent) {
 	const x = event.clientX - rect.left
 	const y = event.clientY - rect.top
 
-	for (const { elements } of slides.value) {
-		for (let i = elements.length - 1; i >= 0; i--) {
-			const element = elements[i]
-			const { area } = element
+	for (let i = slide.value.elements.length - 1; i >= 0; i--) {
+		const element = slide.value.elements[i]
+		const { area } = element
 
-			if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
-				highlightElement(element)
-				return
-			}
+		if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
+			highlightElement(element)
+			return
 		}
 	}
 }
