@@ -15,5 +15,7 @@ jobs:
         run: npm run format:check
       - name: Check linting
         run: npm run lint
+      - name: Add user before deploy
+        run: git config --global user.email "a.n.bochkarev1991@gmail.com" && git config --global user.name "anbochkarev1991"
       - name: Deploy to gh-pages branch
         run: npm run deploy
