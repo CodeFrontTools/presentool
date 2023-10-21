@@ -20,13 +20,13 @@ export type TextElement = Element & {
 	content: string
 }
 
+export type Element = {
+	area: ElementArea
+}
+
 export type ElementArea = {
 	x: number
 	y: number
 	width: number
 	height: number
-}
-
-export type Element = {
-	area: ElementArea
 }

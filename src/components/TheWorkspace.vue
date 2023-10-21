@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import type { Ref } from 'vue'
-import type { Slide, SlideElement } from '@/types'
+import { ref, onMounted, type Ref } from 'vue'
+import type { Slide, SlideElement } from '../types'
 import { DnDElements } from '@/components/DnD'
 
 const slides: Ref<Array<Slide>> = ref([
@@ -14,10 +13,8 @@ const slides: Ref<Array<Slide>> = ref([
 	},
 ])
 
-const lower = ref()
-const upper = ref()
-let lowerCanvas: CanvasRenderingContext2D
-let upperCanvas: CanvasRenderingContext2D
+const canvas = ref()
+let canvasContext: CanvasRenderingContext2D
 let imageWidth: number
 let imageHeight: number
 let currentSlide = 0
@@ -25,24 +22,24 @@ let currentSlide = 0
 const DnD = new DnDElements()
 
 onMounted(() => {
-	upperCanvas = upper.value.getContext('2d')
-	DnD.init(upper.value, slides.value[currentSlide].elements, drawElements)
+	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
+	DnD.init(canvas.value, slides.value[currentSlide].elements, drawElements)
 	drawElements()
 })
 
 const drawElements = () => {
-	if (upperCanvas === null || upper.value === null) {
+	if (canvasContext === null || canvas.value === null) {
 		return
 	}
 
-	upperCanvas.clearRect(0, 0, upper.value.width, upper.value.height)
+	canvasContext.clearRect(0, 0, canvas.value.width, canvas.value.height)
 
 	for (const element of slides.value[currentSlide].elements) {
 		if (element.type === 'rectangle') {
-			upperCanvas.fillStyle = element.color || ''
-			upperCanvas.fillRect(element.area.x, element.area.y, element.area.width, element.area.height)
+			canvasContext.fillStyle = element.color || ''
+			canvasContext.fillRect(element.area.x, element.area.y, element.area.width, element.area.height)
 		} else if (element.type === 'image') {
-			upperCanvas.putImageData(element.content, element.area.x, element.area.y)
+			canvasContext.putImageData(element.content, element.area.x, element.area.y)
 		}
 	}
 }
@@ -50,8 +47,8 @@ const drawElements = () => {
 function addImage(file: File) {
 	if (!file) return
 
-	const canvasWidth: number = upper.value.width
-	const canvasHeight: number = upper.value.height
+	const canvasWidth: number = canvas.value.width
+	const canvasHeight: number = canvas.value.height
 
 	const image = new Image()
 	image.src = URL.createObjectURL(file)
@@ -73,68 +70,106 @@ function addImage(file: File) {
 		const x = (canvasWidth - imageWidth) / 2
 		const y = (canvasHeight - imageHeight) / 2
 
-		upperCanvas?.drawImage(image, x, y, imageWidth, imageHeight)
+		canvasContext?.drawImage(image, x, y, imageWidth, imageHeight)
 
-		const imageData = upperCanvas?.getImageData(x, y, imageWidth, imageHeight)
+		const imageData = canvasContext?.getImageData(x, y, imageWidth, imageHeight)
 		const newSlideElement: SlideElement = {
 			type: 'image',
-			area: {
-				x: x,
-				y: y,
-				width: canvasWidth,
-				height: canvasHeight,
-			},
 			content: imageData,
+			area: {
+				x,
+				y,
+				width: imageWidth,
+				height: imageHeight,
+			},
 		}
 		slides.value[currentSlide].elements.push(newSlideElement)
 	})
 }
 
 function handleCanvasClick(event: MouseEvent) {
-	const rect = upper.value.getBoundingClientRect()
+	const rect = canvas.value.getBoundingClientRect()
 	const x = event.clientX - rect.left
 	const y = event.clientY - rect.top
-
-	let clickedElement: SlideElement | null = null
 
 	for (const { elements } of slides.value) {
 		for (let i = elements.length - 1; i >= 0; i--) {
 			const element = elements[i]
 			const { area } = element
-			console.log('iter')
 
 			if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
-				clickedElement = element
+				highlightElement(element)
 				return
 			}
 		}
 	}
 }
+
+function highlightElement(element: SlideElement) {
+	const { x, y, width, height } = element.area
+
+	canvasContext.fillStyle = '#1a73e8'
+	canvasContext.strokeStyle = '#1a73e8'
+	canvasContext.strokeRect(x, y, width, height)
+
+	canvasContext.strokeStyle = '#fff'
+	canvasContext.fillRect(x - 4, y - 4, 8, 8)
+	canvasContext.strokeRect(x - 4, y - 4, 8, 8)
+	canvasContext.fillRect(x + width - 4, y - 4, 8, 8)
+	canvasContext.strokeRect(x + width - 4, y - 4, 8, 8)
+	canvasContext.fillRect(x + width - 4, y + height - 4, 8, 8)
+	canvasContext.strokeRect(x + width - 4, y + height - 4, 8, 8)
+	canvasContext.fillRect(x - 4, y + height - 4, 8, 8)
+	canvasContext.strokeRect(x - 4, y + height - 4, 8, 8)
+
+	canvasContext.fillRect(x + width / 2 - 4, y - 4, 8, 8)
+	canvasContext.strokeRect(x + width / 2 - 4, y - 4, 8, 8)
+	canvasContext.fillRect(x + width - 4, y + height / 2 - 4, 8, 8)
+	canvasContext.strokeRect(x + width - 4, y + height / 2 - 4, 8, 8)
+	canvasContext.fillRect(x + width / 2 - 4, y + height - 4, 8, 8)
+	canvasContext.strokeRect(x + width / 2 - 4, y + height - 4, 8, 8)
+	canvasContext.fillRect(x - 4, y + height / 2 - 4, 8, 8)
+	canvasContext.strokeRect(x - 4, y + height / 2 - 4, 8, 8)
+}
 </script>
 
 <template>
-	<!-- <canvas ref="lower" :class="$style.canvas" width="700" height="400" /> -->
-	<canvas
-		ref="upper"
-		@mousedown.prevent="DnD.drag"
-		@mouseup.prevent="DnD.drop"
-		@mouseout.prevent="DnD.drop"
-		@mousemove.prevent="DnD.move"
-		:class="$style.canvas"
-		width="700"
-		height="400"
-		@click.prevent="(e) => handleCanvasClick(e)"
-	/>
-	<input
-		:class="'image-btn'"
-		type="file"
-		@change="addImage(($event.target as HTMLInputElement).files![0])"
-	/>
+	<div :class="$style.container">
+		<canvas
+			ref="canvas"
+			@mousedown.prevent="DnD.drag"
+			@mouseup.prevent="DnD.drop"
+			@mouseout.prevent="DnD.drop"
+			@mousemove.prevent="DnD.move"
+			:class="$style.canvas"
+			width="700"
+			height="400"
+			@click="(e) => handleCanvasClick(e)"
+		/>
+		<input
+			:class="$style['image-input']"
+			type="file"
+			@change="addImage(($event.target as HTMLInputElement).files![0])"
+		/>
+	</div>
 </template>
 
 <style module>
-.canvas {
+.container {
+	position: relative;
 	margin: 20px auto;
-	border: 1px solid rebeccapurple;
+}
+
+.canvas {
+	width: 700px;
+	height: 400px;
+	border: 1px solid var(--pt-light-grey);
+	border-radius: var(--pt-border-radius);
+	box-sizing: content-box;
+}
+
+.image-input {
+	display: block;
+	margin: 30px auto 0;
 }
 </style>
