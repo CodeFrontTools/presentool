@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BaseInput from '../inputs/BaseInput.vue'
-import IconDownload from '../icons/IconDownload.vue'
-import IconImage from '../icons/IconImage.vue'
-import IconLogo from '../icons/IconLogo.vue'
+import BaseIcon from '../BaseIcon.vue'
 import BaseButton from '@/components/buttons/BaseButton.vue'
 
 const presentationName = ref<string>('')
@@ -24,7 +22,7 @@ function handleShowSlidesClick(e: Event) {
 <template>
 	<header :class="$style['header']">
 		<div :class="$style['wrapper']">
-			<IconLogo />
+			<BaseIcon name="logo" />
 			<BaseInput
 				:placeholder="'Введите название'"
 				:value="presentationName"
@@ -33,11 +31,8 @@ function handleShowSlidesClick(e: Event) {
 			/>
 		</div>
 		<div :class="$style['wrapper']">
-			<BaseButton icon-name="IconDownload" :action="handleDownloadClick" variant="light">
-				<IconDownload />
-			</BaseButton>
-			<BaseButton icon-name="IconImage" :action="handleShowSlidesClick" variant="colored">
-				<IconImage />
+			<BaseButton icon-name="export" :action="handleDownloadClick" variant="light" />
+			<BaseButton icon-name="image" :action="handleShowSlidesClick" variant="colored">
 				Показ слайдов
 			</BaseButton>
 		</div>

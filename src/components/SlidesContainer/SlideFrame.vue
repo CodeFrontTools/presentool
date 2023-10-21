@@ -3,7 +3,7 @@
 		<div :class="[$style.wrapper]">
 			<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
 			<button :class="[$style.btnRemove]" @click="remove">
-				<RemoveIcon />
+				<BaseIcon name="remove" />
 			</button>
 		</div>
 
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import RemoveIcon from '../icons/iconRemove.vue'
+import BaseIcon from '../BaseIcon.vue'
 
 type SlideItemProps = {
 	slideNumber: number
