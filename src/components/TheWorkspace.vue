@@ -97,15 +97,12 @@ function handleCanvasClick(event: MouseEvent) {
 	const x = event.clientX - rect.left
 	const y = event.clientY - rect.top
 
-	let clickedElement: SlideElement | null = null
-
 	for (const { elements } of slides.value) {
 		for (let i = elements.length - 1; i >= 0; i--) {
 			const element = elements[i]
 			const { area } = element
 
 			if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
-				clickedElement = element
 				highlightElement(element)
 				return
 			}
