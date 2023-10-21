@@ -37,7 +37,12 @@ const drawElements = () => {
 	for (const element of slides.value[currentSlide].elements) {
 		if (element.type === 'rectangle') {
 			canvasContext.fillStyle = element.color || ''
-			canvasContext.fillRect(element.area.x, element.area.y, element.area.width, element.area.height)
+			canvasContext.fillRect(
+				element.area.x,
+				element.area.y,
+				element.area.width,
+				element.area.height,
+			)
 		} else if (element.type === 'image') {
 			canvasContext.putImageData(element.content, element.area.x, element.area.y)
 		}
