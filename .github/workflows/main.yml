@@ -15,3 +15,5 @@ jobs:
         run: npm run format:check
       - name: Check linting
         run: npm run lint
+      - name: Deploy to gh-pages branch
+        run: npm run deploy
