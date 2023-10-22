@@ -31,15 +31,14 @@ const dragStart = (index: number, evt: DragEvent) => {
 	evt.dataTransfer!.dropEffect = 'move'
 	dragging.value = index
 }
-const isDragOver = ref(false);
+const isDragOver = ref(false)
 
 const dragEnter = (index: number, evt: { target: HTMLInputElement }) => {
-	isDragOver.value = true;
+	isDragOver.value = true
 }
 
 const dragLeave = (index: number, evt: { target: HTMLInputElement }) => {
-	
-	isDragOver.value = false;
+	isDragOver.value = false
 }
 
 const dragEnd = () => {
@@ -55,7 +54,6 @@ const moveItem = (from: number, to: number) => {
 const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 	moveItem(dragging.value, to)
 }
-
 </script>
 
 <template>
@@ -76,7 +74,7 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 				draggable="true"
 				@dragstart.stop="dragStart(index, $event)"
 				@dragenter.stop="dragEnter(index, $event)"
-				@dragleave.="dragLeave(index, $event)"				
+				@dragleave.="dragLeave(index, $event)"
 				@dragend="dragEnd"
 				@drop="dragFinish(index, $event)"
 			/>
