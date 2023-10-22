@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, type Ref } from 'vue'
-import type { Slide, SlideElement } from '@/types'
-import { DnDElements } from '@/components/DnD'
+import type { ElementArea, Slide, SlideElement } from '@/types'
+import { ElementController } from '@/components/ElementController/ElementController'
 
 const slide: Ref<Slide> = ref({
 	id: 0,
@@ -11,21 +11,28 @@ const slide: Ref<Slide> = ref({
 	],
 })
 
+const highlightPoints: Ref<ElementArea[]> = ref([])
+
 const canvas = ref()
 let canvasContext: CanvasRenderingContext2D
 let imageWidth: number
 let imageHeight: number
 
-const DnD = new DnDElements()
+let elementController: ElementController | undefined
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
-	DnD.init(canvas.value, slide.value.elements, drawElements)
+	elementController = new ElementController(
+		canvas.value,
+		slide.value.elements,
+		highlightPoints.value,
+		drawElements,
+	)
 	drawElements()
 })
 
 const drawElements = () => {
-	if (canvasContext === null || canvas.value === null) {
+	if (canvas.value === null) {
 		return
 	}
 
@@ -41,7 +48,19 @@ const drawElements = () => {
 				element.area.height,
 			)
 		} else if (element.type === 'image') {
-			canvasContext.putImageData(element.content, element.area.x, element.area.y)
+			const canvasImage = document.createElement('canvas')
+			const imageContext = canvasImage.getContext('2d')
+
+			canvasImage.width = element.content.width
+			canvasImage.height = element.content.height
+			imageContext?.putImageData(element.content, 0, 0)
+			canvasContext.drawImage(
+				canvasImage,
+				element.area.x,
+				element.area.y,
+				element.area.width,
+				element.area.height,
+			)
 		}
 	}
 }
@@ -99,8 +118,11 @@ function handleCanvasClick(event: MouseEvent) {
 		const { area } = element
 
 		if (area.x <= x && x <= area.x + area.width && area.y <= y && y <= area.y + area.height) {
+			drawElements()
 			highlightElement(element)
 			return
+		} else {
+			drawElements()
 		}
 	}
 }
@@ -113,23 +135,24 @@ function highlightElement(element: SlideElement) {
 	canvasContext.strokeRect(x, y, width, height)
 
 	canvasContext.strokeStyle = '#fff'
-	canvasContext.fillRect(x - 4, y - 4, 8, 8)
-	canvasContext.strokeRect(x - 4, y - 4, 8, 8)
-	canvasContext.fillRect(x + width - 4, y - 4, 8, 8)
-	canvasContext.strokeRect(x + width - 4, y - 4, 8, 8)
-	canvasContext.fillRect(x + width - 4, y + height - 4, 8, 8)
-	canvasContext.strokeRect(x + width - 4, y + height - 4, 8, 8)
-	canvasContext.fillRect(x - 4, y + height - 4, 8, 8)
-	canvasContext.strokeRect(x - 4, y + height - 4, 8, 8)
+	const size = 8
+	const newHighlightPoints: ElementArea[] = [
+		{ x: x - 4, y: y - 4, width: size, height: size },
+		{ x: x + width - 4, y: y - 4, width: size, height: size },
+		{ x: x + width - 4, y: y + height - 4, width: size, height: size },
+		{ x: x - 4, y: y + height - 4, width: size, height: size },
+		{ x: x + width / 2 - 4, y: y - 4, width: size, height: size },
+		{ x: x + width - 4, y: y + height / 2 - 4, width: size, height: size },
+		{ x: x + width / 2 - 4, y: y + height - 4, width: size, height: size },
+		{ x: x - 4, y: y + height / 2 - 4, width: size, height: size },
+	]
 
-	canvasContext.fillRect(x + width / 2 - 4, y - 4, 8, 8)
-	canvasContext.strokeRect(x + width / 2 - 4, y - 4, 8, 8)
-	canvasContext.fillRect(x + width - 4, y + height / 2 - 4, 8, 8)
-	canvasContext.strokeRect(x + width - 4, y + height / 2 - 4, 8, 8)
-	canvasContext.fillRect(x + width / 2 - 4, y + height - 4, 8, 8)
-	canvasContext.strokeRect(x + width / 2 - 4, y + height - 4, 8, 8)
-	canvasContext.fillRect(x - 4, y + height / 2 - 4, 8, 8)
-	canvasContext.strokeRect(x - 4, y + height / 2 - 4, 8, 8)
+	for (let i = 0; i < newHighlightPoints.length; i++) {
+		const point = newHighlightPoints[i]
+		canvasContext.fillRect(point.x, point.y, size, size)
+		canvasContext.strokeRect(point.x, point.y, size, size)
+		highlightPoints.value[i] = point
+	}
 }
 </script>
 
@@ -137,10 +160,10 @@ function highlightElement(element: SlideElement) {
 	<div :class="$style.container">
 		<canvas
 			ref="canvas"
-			@mousedown.prevent="DnD.drag"
-			@mouseup.prevent="DnD.drop"
-			@mouseout.prevent="DnD.drop"
-			@mousemove.prevent="DnD.move"
+			@mousedown.prevent="elementController?.drag"
+			@mouseup.prevent="elementController?.drop"
+			@mouseout.prevent="elementController?.drop"
+			@mousemove.prevent="elementController?.move"
 			:class="$style.canvas"
 			width="700"
 			height="400"
