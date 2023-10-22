@@ -14,6 +14,7 @@ import Workspace from '@/components/TheWorkspace.vue'
 
 <style module>
 .container {
+	overflow: hidden;
 	display: flex;
 }
 </style>
