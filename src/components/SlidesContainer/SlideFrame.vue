@@ -9,8 +9,9 @@ defineProps<{
 <template>
 	<div :class="[$style.container]">
 		<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
-		<div :class="[$style.miniature, selected ? $style.selected : '']"></div>
-		<div>{{ name }}</div>
+		<div :class="[$style.miniature, selected ? $style.selected : '']">
+			<span :class="[$style.slideName]">{{ name }}</span>
+		</div>
 	</div>
 </template>
 
@@ -18,6 +19,7 @@ defineProps<{
 .container {
 	display: flex;
 	justify-content: end;
+	padding-right: 16px;
 }
 
 .slideNumber {
@@ -30,9 +32,24 @@ defineProps<{
 	width: 157px;
 	height: 92px;
 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	margin-left: 8px;
 	border: 1px solid var(--pt-light-grey);
 	border-radius: var(--pt-border-radius);
+
+	cursor: pointer;
+
+	&:hover {
+		border: 1px solid var(--pt-blue);
+		box-shadow: 0px 0px 4px -1px var(--pt-blue);
+	}
+}
+
+.slideName {
+	color: var(--pt-md-grey);
 }
 
 .selected {

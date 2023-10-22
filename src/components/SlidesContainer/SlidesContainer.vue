@@ -7,12 +7,12 @@ import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
 
 const slides: Ref<SlideData[]> = ref([
-	{ id: '1', name: 'str1' },
-	{ id: '2', name: 'str2' },
-	{ id: '3', name: 'str3' },
-	{ id: '4', name: 'str4' },
-	{ id: '5', name: 'str5' },
-	{ id: '6', name: 'str6' },
+	{ id: '1', name: 'Слайд 1' },
+	{ id: '2', name: 'Слайд 2' },
+	{ id: '3', name: 'Слайд 3' },
+	{ id: '4', name: 'Слайд 4' },
+	{ id: '5', name: 'Слайд 5' },
+	{ id: '6', name: 'Слайд 6' },
 ])
 const selectedSlide = ref('1')
 
@@ -31,6 +31,16 @@ const dragStart = (index: number, evt: DragEvent) => {
 	evt.dataTransfer!.dropEffect = 'move'
 	dragging.value = index
 }
+const isDragOver = ref(false);
+
+const dragEnter = (index: number, evt: { target: HTMLInputElement }) => {
+	isDragOver.value = true;
+}
+
+const dragLeave = (index: number, evt: { target: HTMLInputElement }) => {
+	
+	isDragOver.value = false;
+}
 
 const dragEnd = () => {
 	dragging.value = -1
@@ -44,9 +54,8 @@ const moveItem = (from: number, to: number) => {
 
 const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 	moveItem(dragging.value, to)
-	evt.target!.style.marginTop = '2px'
-	evt.target!.style.marginBottom = '2px'
 }
+
 </script>
 
 <template>
@@ -57,15 +66,17 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 		<div :class="$style.slidesContainer">
 			<SlideFrame
 				v-for="(slide, index) in slides"
-				:class="[$style.slideItem]"
+				:class="[$style.slideItem, isDragOver ? $style.hover : '']"
 				:key="slide.id"
 				:slideNumber="index + 1"
 				:name="slide.name"
 				:selected="selectedSlide === slide.id"
-				@click="selectSlide(slide.id)"
-				draggable="true"
-				@dragstart="dragStart(index, $event)"
+				@mousedown="selectSlide(slide.id)"
 				@dragover.prevent
+				draggable="true"
+				@dragstart.stop="dragStart(index, $event)"
+				@dragenter.stop="dragEnter(index, $event)"
+				@dragleave.="dragLeave(index, $event)"				
 				@dragend="dragEnd"
 				@drop="dragFinish(index, $event)"
 			/>
@@ -94,5 +105,9 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 
 .slideItem:not(:last-child) {
 	margin-bottom: 16px;
+}
+
+.hover {
+	background-color: deeppink;
 }
 </style>
