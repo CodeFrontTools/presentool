@@ -27,7 +27,8 @@ jobs:
         run: npm run build
 
       - name: Deploy to GH Pages 🚀
-        run: npm run deploy
+        run: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_dir: public
