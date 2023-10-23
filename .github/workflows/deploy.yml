@@ -29,7 +29,6 @@ jobs:
       - name: Deploy to GH Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.ACTIONS_SSH_KEY }}
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          ssh_key: ${{ secrets.ACTIONS_SSH_KEY }}
           publish_dir: public
