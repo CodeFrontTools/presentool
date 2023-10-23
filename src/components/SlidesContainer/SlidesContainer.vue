@@ -32,16 +32,14 @@ const dragStart = (index: number, evt: DragEvent) => {
 	dragging.value = index
 }
 
-
 const dragEnter = (item: number, evt: { target: HTMLInputElement }) => {
-
-	if(dragging.value !== item){
+	if (dragging.value !== item) {
 		evt.target.style.backgroundColor = '#f4f4f4'
-	}       
-  }
+	}
+}
 
-const dragLeave = (item: number, evt: { target: HTMLInputElement }) =>  {     
-    evt.target.style.backgroundColor = 'white'
+const dragLeave = (item: number, evt: { target: HTMLInputElement }) => {
+	evt.target.style.backgroundColor = 'white'
 }
 
 const dragEnd = () => {
@@ -54,7 +52,7 @@ const moveItem = (from: number, to: number) => {
 	slides.value.splice(to, 0, slides.value.splice(from, 1)[0])
 }
 
-const dragFinish = (to: number,  evt: { target: HTMLInputElement }) => {
+const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 	moveItem(dragging.value, to)
 	evt.target.style.backgroundColor = 'white'
 }
@@ -74,7 +72,6 @@ const dragFinish = (to: number,  evt: { target: HTMLInputElement }) => {
 				:name="slide.name"
 				:selected="selectedSlide === slide.id"
 				@mousedown="selectSlide(slide.id)"
-				
 				draggable="true"
 				@dragstart="dragStart(index, $event)"
 				@dragenter="dragEnter(index, $event)"
@@ -82,7 +79,7 @@ const dragFinish = (to: number,  evt: { target: HTMLInputElement }) => {
 				@dragend="dragEnd"
 				@drop="dragFinish(index, $event)"
 				@dragover.prevent
-  				@dragenter.prevent
+				@dragenter.prevent
 			/>
 		</div>
 	</div>
