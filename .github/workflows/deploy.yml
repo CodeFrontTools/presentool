@@ -31,4 +31,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          ssh_key: ${{ secrets.ACTIONS_SSH_KEY }}
           publish_dir: public
