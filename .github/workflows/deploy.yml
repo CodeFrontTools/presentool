@@ -3,7 +3,7 @@ name: Build and deploy
 on:
   push:
     branches:
-      - PT-xx-deploy-script
+      - PT-deploy-script
 
 jobs:
   build:
