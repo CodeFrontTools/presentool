@@ -31,14 +31,17 @@ const dragStart = (index: number, evt: DragEvent) => {
 	evt.dataTransfer!.dropEffect = 'move'
 	dragging.value = index
 }
-const isDragOver = ref(false)
 
-const dragEnter = (index: number, evt: { target: HTMLInputElement }) => {
-	isDragOver.value = true
-}
 
-const dragLeave = (index: number, evt: { target: HTMLInputElement }) => {
-	isDragOver.value = false
+const dragEnter = (item: number, evt: { target: HTMLInputElement }) => {
+
+	if(dragging.value !== item){
+		evt.target.style.backgroundColor = '#f4f4f4'
+	}       
+  }
+
+const dragLeave = (item: number, evt: { target: HTMLInputElement }) =>  {     
+    evt.target.style.backgroundColor = 'white'
 }
 
 const dragEnd = () => {
@@ -51,8 +54,9 @@ const moveItem = (from: number, to: number) => {
 	slides.value.splice(to, 0, slides.value.splice(from, 1)[0])
 }
 
-const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
+const dragFinish = (to: number,  evt: { target: HTMLInputElement }) => {
 	moveItem(dragging.value, to)
+	evt.target.style.backgroundColor = 'white'
 }
 </script>
 
@@ -64,19 +68,21 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 		<div :class="$style.slidesContainer">
 			<SlideFrame
 				v-for="(slide, index) in slides"
-				:class="[$style.slideItem, isDragOver ? $style.hover : '']"
+				:class="$style.slideItem"
 				:key="slide.id"
 				:slideNumber="index + 1"
 				:name="slide.name"
 				:selected="selectedSlide === slide.id"
 				@mousedown="selectSlide(slide.id)"
-				@dragover.prevent
+				
 				draggable="true"
-				@dragstart.stop="dragStart(index, $event)"
-				@dragenter.stop="dragEnter(index, $event)"
-				@dragleave.="dragLeave(index, $event)"
+				@dragstart="dragStart(index, $event)"
+				@dragenter="dragEnter(index, $event)"
+				@dragleave="dragLeave(index, $event)"
 				@dragend="dragEnd"
 				@drop="dragFinish(index, $event)"
+				@dragover.prevent
+  				@dragenter.prevent
 			/>
 		</div>
 	</div>
@@ -103,9 +109,5 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 
 .slideItem:not(:last-child) {
 	margin-bottom: 16px;
-}
-
-.hover {
-	background-color: deeppink;
 }
 </style>
