@@ -3,10 +3,11 @@ import type { Ref } from 'vue'
 import type { ElementArea, SlideElement } from '@/types'
 import { Resize } from '@/components/ElementController/Resize'
 import { DnD } from '@/components/ElementController/DnD'
+import { History } from '@/main'
 
 export class ElementController {
 	#canvas: HTMLCanvasElement
-	#elements: SlideElement[]
+	#elements: SlideElement[] | undefined
 	#startDragX: Ref<number | undefined>
 	#startDragY: Ref<number | undefined>
 	#drawElements: () => void
@@ -15,7 +16,7 @@ export class ElementController {
 
 	constructor(
 		canvas: HTMLCanvasElement,
-		elements: SlideElement[],
+		elements: SlideElement[] | undefined,
 		highlightPoints: ElementArea[],
 		drawElements: () => void,
 	) {
@@ -44,6 +45,9 @@ export class ElementController {
 	}
 
 	drop() {
+		if (this.#DnD.isDragging || this.#Resize.isResizing) {
+			History.save()
+		}
 		this.#DnD.drop()
 		this.#Resize.drop()
 	}
@@ -54,6 +58,7 @@ export class ElementController {
 		}
 
 		if (
+			!this.#elements ||
 			!this.#startDragX.value ||
 			!this.#startDragY.value ||
 			this.#DnD.currentElementIndex === null

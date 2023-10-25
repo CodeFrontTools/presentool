@@ -1,31 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { toRef } from 'vue'
 import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
-import type { SlideData } from '@/components/SlidesContainer/types'
+import type { Slide } from '@/types'
 
-const slides = ref<SlideData[]>([
-	{ id: '1' },
-	{ id: '2' },
-	{ id: '3' },
-	{ id: '4' },
-	{ id: '5' },
-	{ id: '6' },
-])
-const selectedSlide = ref('1')
+const props = defineProps<{ slides: Slide[]; currentSlideId: string | null }>()
+const emit = defineEmits<{ selectSlide: [slideId: string]; removeSlide: [slideId: string] }>()
 
-function selectSlide(slideNumber: string) {
-	selectedSlide.value = slideNumber
+const slides = toRef(props, 'slides')
+
+function selectSlide(slideId: string) {
+	emit('selectSlide', slideId)
 }
 
 function addSlide() {
-	slides.value.push({ id: generateId() })
+	slides.value.push({ id: generateId(), elements: [] })
 }
 
-const removeSlide = (id: string) => {
-	const slideIndex = slides.value.findIndex((item) => item.id === id)
-	slides.value.splice(slideIndex, 1)
+const removeSlide = (slideId: string) => {
+	emit('removeSlide', slideId)
 }
 </script>
 
@@ -41,7 +35,7 @@ const removeSlide = (id: string) => {
 				:key="slide.id"
 				:slide-index="slide.id"
 				:slideNumber="index + 1"
-				:selected="selectedSlide === slide.id"
+				:selected="currentSlideId === slide.id"
 				@click="selectSlide(slide.id)"
 				@remove="removeSlide"
 			/>

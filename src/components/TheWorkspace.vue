@@ -1,14 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue'
+import { ref, onMounted, type Ref, watch, toRef } from 'vue'
 import type { ElementArea, Slide, SlideElement } from '@/types'
 import { ElementController } from '@/components/ElementController/ElementController'
+import { History } from '@/main'
 
-const slide: Ref<Slide> = ref({
-	id: 0,
-	elements: [
-		{ type: 'rectangle', area: { x: 0, y: 0, width: 100, height: 100 }, color: 'red' },
-		{ type: 'rectangle', area: { x: 50, y: 50, width: 150, height: 150 }, color: 'blue' },
-	],
+type WorkspaceProps = {
+	slide: Slide | undefined
+}
+
+const props = defineProps<WorkspaceProps>()
+
+const slide = toRef(props, 'slide')
+
+watch(slide, () => {
+	elementController = new ElementController(
+		canvas.value,
+		slide.value?.elements,
+		highlightPoints.value,
+		drawElements,
+	)
+	drawElements()
 })
 
 const highlightPoints: Ref<ElementArea[]> = ref([])
@@ -22,17 +33,10 @@ let elementController: ElementController | undefined
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
-	elementController = new ElementController(
-		canvas.value,
-		slide.value.elements,
-		highlightPoints.value,
-		drawElements,
-	)
-	drawElements()
 })
 
 const drawElements = () => {
-	if (canvas.value === null) {
+	if (canvas.value === null || !slide.value) {
 		return
 	}
 
@@ -104,11 +108,17 @@ function addImage(file: File) {
 				height: imageHeight,
 			},
 		}
-		slide.value.elements.push(newSlideElement)
+
+		slide.value?.elements.push(newSlideElement)
+		History.save()
 	})
 }
 
 function handleCanvasClick(event: MouseEvent) {
+	if (!slide.value) {
+		return
+	}
+
 	const rect = canvas.value.getBoundingClientRect()
 	const x = event.clientX - rect.left
 	const y = event.clientY - rect.top

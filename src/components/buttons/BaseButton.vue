@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import Icon from '../BaseIcon.vue'
+import type { BaseButtonProps } from '@/components/buttons/types'
 
-defineProps<{
-	action: (args: any) => void
-	variant: 'light' | 'colored'
-	disabled?: boolean
-	iconName?: string
-}>()
+defineProps<BaseButtonProps>()
 </script>
 
 <template>
