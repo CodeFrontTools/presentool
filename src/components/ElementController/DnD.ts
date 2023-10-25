@@ -7,14 +7,18 @@ export class DnD implements DnDInterface {
 	#isDragging: Ref<boolean> = ref(false)
 	#currentElementIndex: Ref<number | null> = ref(null)
 	#helper: Helper
-	#elements: Element[]
+	#elements: Element[] | undefined
 
-	constructor(elements: Element[]) {
+	constructor(elements: Element[] | undefined) {
 		this.#helper = new Helper()
 		this.#elements = elements
 	}
 
 	drag(startDragX: number, startDragY: number) {
+		if (!this.#elements) {
+			return
+		}
+
 		let shapeIndex = 0
 
 		for (const element of this.#elements) {

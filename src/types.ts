@@ -1,5 +1,5 @@
 export type Slide = {
-	id: number
+	id: string
 	elements: Array<SlideElement>
 }
 
