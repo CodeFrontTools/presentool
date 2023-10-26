@@ -21,14 +21,14 @@ const remove = () => {
 </script>
 
 <template>
-		<div :class="[$style.containerSlide]">
+	<div :class="[$style.containerSlide]">
 		<div :class="[$style.wrapper]">
 			<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
 			<button :class="[$style.btnRemove]" @click="remove">
 				<RemoveIcon />
 			</button>
 		</div>
-			<div :class="[$style.miniature, selected ? $style.selected : '']">
+		<div :class="[$style.miniature, selected ? $style.selected : '']">
 			{{ name }}
 		</div>
 	</div>
@@ -44,7 +44,7 @@ const remove = () => {
 .containerSlide {
 	display: flex;
 	justify-content: end;
-	
+
 	&:hover {
 		.btnRemove {
 			transition: 0.5s;
@@ -83,7 +83,7 @@ const remove = () => {
 
 .selected {
 	border: 2px solid var(--pt-blue);
-	
+
 	&:hover {
 		border: 2px solid var(--pt-blue);
 		box-shadow: 0px 0px 4px -1px var(--pt-blue);

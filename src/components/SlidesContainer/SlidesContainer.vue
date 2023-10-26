@@ -34,7 +34,7 @@ const dragStart = (index: number, evt: DragEvent) => {
 
 const dragEnter = (item: number, evt: { target: HTMLInputElement }) => {
 	const className = evt.target.className
-	const isMiniature = className.includes('miniature');
+	const isMiniature = className.includes('miniature')
 
 	if (dragging.value !== item && isMiniature) {
 		evt.target.style.backgroundColor = '#e3e3e3'
