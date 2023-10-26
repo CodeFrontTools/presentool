@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import type { SlideData } from '@/components/SlidesContainer/types'
+import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
+import type { SlideData } from '@/components/SlidesContainer/types'
 
 const slides: Ref<SlideData[]> = ref([
 	{ id: '1', name: 'Слайд 1' },
@@ -33,8 +33,11 @@ const dragStart = (index: number, evt: DragEvent) => {
 }
 
 const dragEnter = (item: number, evt: { target: HTMLInputElement }) => {
-	if (dragging.value !== item) {
-		evt.target.style.backgroundColor = '#f4f4f4'
+	const className = evt.target.className
+	const isMiniature = className.includes('miniature');
+
+	if (dragging.value !== item && isMiniature) {
+		evt.target.style.backgroundColor = '#e3e3e3'
 	}
 }
 
@@ -56,18 +59,24 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 	moveItem(dragging.value, to)
 	evt.target.style.backgroundColor = 'white'
 }
+
+const removeSlide = (id: string) => {
+	const slideIndex = slides.value.findIndex((item) => item.id === id)
+	slides.value.splice(slideIndex, 1)
+}
 </script>
 
 <template>
 	<div :class="$style.container">
-		<BaseButton icon-name="plus" :action="addSlide" variant="light" :class="[$style.button]"
-			>Добавить слайд</BaseButton
+		<BaseButton icon-name="plus" :action="addSlide" variant="light" :class="[$style.button]">
+			Добавить слайд</BaseButton
 		>
 		<div :class="$style.slidesContainer">
 			<SlideFrame
 				v-for="(slide, index) in slides"
 				:class="$style.slideItem"
 				:key="slide.id"
+				:slide-index="slide.id"
 				:slideNumber="index + 1"
 				:name="slide.name"
 				:selected="selectedSlide === slide.id"
@@ -80,6 +89,7 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 				@drop="dragFinish(index, $event)"
 				@dragover.prevent
 				@dragenter.prevent
+				@remove="removeSlide"
 			/>
 		</div>
 	</div>

@@ -25,25 +25,26 @@ defineProps<{
 	padding: 8px;
 	font-weight: 400;
 	font-size: 13px;
+	border: 1px solid;
 	border-radius: var(--pt-border-radius);
 }
 
 .input_border {
-	border: 1px solid var(--pt-light-grey);
+	border-color: var(--pt-light-grey);
 }
 
 .input_flat {
-	border: none;
+	border-color: transparent;
 }
 
 .input:not(:disabled):hover {
 	border-color: var(--pt-grey);
-	cursor: pointer;
+	cursor: text;
 }
 
 .input_flat:not(:disabled):hover,
 .input:not(:disabled):active {
-	box-shadow: inset 0 0 0 1px var(--pt-grey);
+	border-color: var(--pt-grey);
 }
 
 .input:disabled {
