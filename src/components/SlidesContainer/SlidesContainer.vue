@@ -21,6 +21,43 @@ function addSlide() {
 const removeSlide = (slideId: string) => {
 	emit('removeSlide', slideId)
 }
+
+
+const dragging = ref(-1)
+
+const dragStart = (index: number, evt: DragEvent) => {
+	evt.dataTransfer!.setData('Text', index.toString())
+	evt.dataTransfer!.dropEffect = 'move'
+	dragging.value = index
+}
+
+const dragEnter = (item: number, evt: { target: HTMLInputElement }) => {
+	const className = evt.target.className
+	const isMiniature = className.includes('miniature')
+
+	if (dragging.value !== item && isMiniature) {
+		evt.target.style.backgroundColor = '#e3e3e3'
+	}
+}
+
+const dragLeave = (item: number, evt: { target: HTMLInputElement }) => {
+	evt.target.style.backgroundColor = 'white'
+}
+
+const dragEnd = () => {
+	dragging.value = -1
+}
+
+const moveItem = (from: number, to: number) => {
+	if (to === -1) return
+
+	slides.value.splice(to, 0, slides.value.splice(from, 1)[0])
+}
+
+const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
+	moveItem(dragging.value, to)
+	evt.target.style.backgroundColor = 'white'
+}
 </script>
 
 <template>
@@ -31,12 +68,20 @@ const removeSlide = (slideId: string) => {
 		<div :class="$style.slidesContainer">
 			<SlideFrame
 				v-for="(slide, index) in slides"
-				:class="[$style.slideItem]"
+				:class="$style.slideItem"
 				:key="slide.id"
 				:slide-index="slide.id"
 				:slideNumber="index + 1"
 				:selected="currentSlideId === slide.id"
-				@click="selectSlide(slide.id)"
+				@mousedown="selectSlide(slide.id)"
+				draggable="true"
+				@dragstart="dragStart(index, $event)"
+				@dragenter="dragEnter(index, $event)"
+				@dragleave="dragLeave(index, $event)"
+				@dragend="dragEnd"
+				@drop="dragFinish(index, $event)"
+				@dragover.prevent
+				@dragenter.prevent
 				@remove="removeSlide"
 			/>
 		</div>
@@ -45,7 +90,7 @@ const removeSlide = (slideId: string) => {
 
 <style module>
 .container {
-	display: inline-flex;
+	display: flex;
 	flex-direction: column;
 	overflow: auto;
 	width: 200px;
