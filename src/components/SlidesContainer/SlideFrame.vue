@@ -27,9 +27,7 @@ const remove = () => {
 				<BaseIcon name="remove" />
 			</button>
 		</div>
-		<div :class="[$style.miniature, selected ? $style.selected : '']">
-			Slide
-		</div>
+		<div :class="[$style.miniature, selected ? $style.selected : '']">Slide</div>
 	</div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRef } from 'vue'
+import { toRef, ref } from 'vue'
 import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
@@ -21,7 +21,6 @@ function addSlide() {
 const removeSlide = (slideId: string) => {
 	emit('removeSlide', slideId)
 }
-
 
 const dragging = ref(-1)
 
