@@ -1,27 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Ref } from 'vue'
+import { toRef, ref } from 'vue'
 import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
-import type { SlideData } from '@/components/SlidesContainer/types'
+import type { Slide } from '@/types'
 
-const slides: Ref<SlideData[]> = ref([
-	{ id: '1', name: 'Слайд 1' },
-	{ id: '2', name: 'Слайд 2' },
-	{ id: '3', name: 'Слайд 3' },
-	{ id: '4', name: 'Слайд 4' },
-	{ id: '5', name: 'Слайд 5' },
-	{ id: '6', name: 'Слайд 6' },
-])
-const selectedSlide = ref('1')
+const props = defineProps<{ slides: Slide[]; currentSlideId: string | null }>()
+const emit = defineEmits<{ selectSlide: [slideId: string]; removeSlide: [slideId: string] }>()
 
-function selectSlide(slideNumber: string) {
-	selectedSlide.value = slideNumber
+const slides = toRef(props, 'slides')
+
+function selectSlide(slideId: string) {
+	emit('selectSlide', slideId)
 }
 
 function addSlide() {
-	slides.value.push({ id: generateId(), name: `str${generateId()}` })
+	slides.value.push({ id: generateId(), elements: [] })
+}
+
+const removeSlide = (slideId: string) => {
+	emit('removeSlide', slideId)
 }
 
 const dragging = ref(-1)
@@ -59,11 +57,6 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 	moveItem(dragging.value, to)
 	evt.target.style.backgroundColor = 'white'
 }
-
-const removeSlide = (id: string) => {
-	const slideIndex = slides.value.findIndex((item) => item.id === id)
-	slides.value.splice(slideIndex, 1)
-}
 </script>
 
 <template>
@@ -78,8 +71,7 @@ const removeSlide = (id: string) => {
 				:key="slide.id"
 				:slide-index="slide.id"
 				:slideNumber="index + 1"
-				:name="slide.name"
-				:selected="selectedSlide === slide.id"
+				:selected="currentSlideId === slide.id"
 				@mousedown="selectSlide(slide.id)"
 				draggable="true"
 				@dragstart="dragStart(index, $event)"

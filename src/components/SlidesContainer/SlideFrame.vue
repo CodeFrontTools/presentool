@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import RemoveIcon from '../icons/iconRemove.vue'
+import BaseIcon from '../BaseIcon.vue'
 
 type SlideItemProps = {
 	slideNumber: number
 	slideIndex: string
 	selected: boolean
-	name: string
 }
 
 type SlideItemEmits = {
@@ -25,12 +24,10 @@ const remove = () => {
 		<div :class="[$style.wrapper]">
 			<div :class="[$style.slideNumber]">{{ slideNumber }}</div>
 			<button :class="[$style.btnRemove]" @click="remove">
-				<RemoveIcon />
+				<BaseIcon name="remove" />
 			</button>
 		</div>
-		<div :class="[$style.miniature, selected ? $style.selected : '']">
-			{{ name }}
-		</div>
+		<div :class="[$style.miniature, selected ? $style.selected : '']">Slide</div>
 	</div>
 </template>
 
