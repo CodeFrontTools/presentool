@@ -8,6 +8,7 @@ import { HistoryManager } from '@/components/HistoryManager'
 
 const app = createApp(App)
 export const History = new HistoryManager({ limit: 20 })
+
 IndexedDBSlides.onConfigured().then(() => {
 	app.use(router)
 

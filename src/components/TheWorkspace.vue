@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, type Ref, watch, toRef } from 'vue'
-import type { ElementArea, Slide, SlideElement } from '@/types'
+import type { ElementArea, RectangleElement, Slide, SlideElement } from '@/types'
 import { ElementController } from '@/components/ElementController/ElementController'
 import { History } from '@/main'
+import { handlersInjector } from '@/core/toolHandlers'
 
 type WorkspaceProps = {
 	slide: Slide | undefined
@@ -33,6 +34,8 @@ let elementController: ElementController | undefined
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
+	handlersInjector.value.addImage = addImage
+	handlersInjector.value.addRectangle = addRectangle
 })
 
 const drawElements = () => {
@@ -114,6 +117,21 @@ function addImage(file: File) {
 	})
 }
 
+const addRectangle = () => {
+	const newSlideElement: RectangleElement = {
+		type: 'rectangle',
+		color: 'blue',
+		area: {
+			x: 0,
+			y: 0,
+			width: 100,
+			height: 100,
+		},
+	}
+	slide.value?.elements.push(newSlideElement)
+	drawElements()
+}
+
 function handleCanvasClick(event: MouseEvent) {
 	if (!slide.value) {
 		return
@@ -179,11 +197,6 @@ function highlightElement(element: SlideElement) {
 			height="400"
 			@click.prevent="(e) => handleCanvasClick(e)"
 		/>
-		<input
-			:class="$style['image-input']"
-			type="file"
-			@change="addImage(($event.target as HTMLInputElement).files![0])"
-		/>
 	</div>
 </template>
 
@@ -199,10 +212,5 @@ function highlightElement(element: SlideElement) {
 	border: 1px solid var(--pt-light-grey);
 	border-radius: var(--pt-border-radius);
 	box-sizing: content-box;
-}
-
-.image-input {
-	display: block;
-	margin: 30px auto 0;
 }
 </style>
