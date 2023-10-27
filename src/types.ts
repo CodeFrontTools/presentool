@@ -1,3 +1,5 @@
+import EditorJS, { type OutputData } from '@editorjs/editorjs'
+
 export type Slide = {
 	id: string
 	elements: Array<SlideElement>
@@ -17,7 +19,7 @@ export type ImageElement = Element & {
 
 export type TextElement = Element & {
 	type: 'text'
-	content: string
+	content: OutputData | null
 }
 
 export type ElementArea = {
@@ -29,4 +31,13 @@ export type ElementArea = {
 
 export type Element = {
 	area: ElementArea
+}
+
+export type TextEditor = {
+	editorInstance: EditorJS | undefined
+	top: number
+	left: number
+	active: boolean
+	editing?: boolean
+	width?: number
 }
