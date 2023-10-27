@@ -15,8 +15,8 @@ function handleDownloadClick(e: Event) {
 	console.log('[ handleDownloadClick ] e: ', e)
 }
 
-function handleShowSlidesClick(e: Event) {
-	document.addEventListener('fullscreenchange', (e) => {
+function handleShowSlidesClick() {
+	document.addEventListener('fullscreenchange', () => {
 		isFullScreenMode.value = !!document.fullscreenElement
 	})
 
