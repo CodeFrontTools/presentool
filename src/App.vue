@@ -6,6 +6,8 @@ import ToolsPanel from '@/components/ToolsPanel/ToolsPanel.vue'
 import type { Slide } from '@/types'
 import { onMounted, ref, type Ref } from 'vue'
 import { History } from '@/main'
+import Fullscreen from '@/components/FullscreenView/FullscreenView.vue'
+import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
 
 const slides: Ref<Slide[]> = ref([
 	{
@@ -49,7 +51,8 @@ const handleRemoveSlide = (slideId: string) => {
 </script>
 
 <template>
-	<div :class="$style.container">
+	<Fullscreen :slide="slides[currentSlideIndex]" v-if="isFullScreenMode" />
+	<div v-else :class="$style.container">
 		<BaseHeader />
 		<div :class="$style.row">
 			<SlidesContainer
@@ -60,7 +63,7 @@ const handleRemoveSlide = (slideId: string) => {
 			/>
 			<div :class="$style.column">
 				<ToolsPanel />
-				<Workspace :slide="slides[currentSlideIndex] || []" />
+				<Workspace :slide="slides[currentSlideIndex]" />
 			</div>
 		</div>
 	</div>
