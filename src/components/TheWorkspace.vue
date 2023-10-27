@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, type Ref, watch, toRef } from 'vue'
-import type { ElementArea, RectangleElement, Slide, SlideElement, ImageElement, TextElement, TextEditor } from '@/types'
+import type {
+	ElementArea,
+	RectangleElement,
+	Slide,
+	SlideElement,
+	ImageElement,
+	TextElement,
+	TextEditor,
+} from '@/types'
 import { ElementController } from '@/components/ElementController/ElementController'
 import { History } from '@/main'
 import { handlersInjector } from '@/core/toolHandlers'
@@ -161,7 +169,8 @@ const addRectangle = () => {
 }
 
 function handleCanvasClick(event: MouseEvent) {
-	if (!slide.value ||
+	if (
+		!slide.value ||
 		event.clientX < canvasRect.left ||
 		event.clientX > canvasRect.right ||
 		event.clientY < canvasRect.top ||
