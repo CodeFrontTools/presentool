@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import BaseInput from '../inputs/BaseInput.vue'
 import BaseIcon from '../BaseIcon.vue'
 import BaseButton from '@/components/buttons/BaseButton.vue'
+import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
 
 const presentationName = ref<string>('')
 
@@ -14,8 +15,12 @@ function handleDownloadClick(e: Event) {
 	console.log('[ handleDownloadClick ] e: ', e)
 }
 
-function handleShowSlidesClick(e: Event) {
-	console.log('[ handleShowSlidesClick ] e: ', e)
+function handleShowSlidesClick() {
+	document.addEventListener('fullscreenchange', () => {
+		isFullScreenMode.value = !!document.fullscreenElement
+	})
+
+	document.documentElement.requestFullscreen()
 }
 </script>
 

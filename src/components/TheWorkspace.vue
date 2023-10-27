@@ -4,6 +4,7 @@ import type { ElementArea, RectangleElement, Slide, SlideElement } from '@/types
 import { ElementController } from '@/components/ElementController/ElementController'
 import { History } from '@/main'
 import { handlersInjector } from '@/core/toolHandlers'
+import { workspaceSizes } from '@/core/workspaceSizes'
 
 type WorkspaceProps = {
 	slide: Slide | undefined
@@ -14,13 +15,7 @@ const props = defineProps<WorkspaceProps>()
 const slide = toRef(props, 'slide')
 
 watch(slide, () => {
-	elementController = new ElementController(
-		canvas.value,
-		slide.value?.elements,
-		highlightPoints.value,
-		drawElements,
-	)
-	drawElements()
+	initialize()
 })
 
 const highlightPoints: Ref<ElementArea[]> = ref([])
@@ -34,9 +29,23 @@ let elementController: ElementController | undefined
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
+	workspaceSizes.value.height = canvas.value.height
+	workspaceSizes.value.width = canvas.value.width
 	handlersInjector.value.addImage = addImage
 	handlersInjector.value.addRectangle = addRectangle
+
+	initialize()
 })
+
+const initialize = () => {
+	elementController = new ElementController(
+		canvas.value,
+		slide.value?.elements,
+		highlightPoints.value,
+		drawElements,
+	)
+	drawElements()
+}
 
 const drawElements = () => {
 	if (canvas.value === null || !slide.value) {
@@ -193,8 +202,8 @@ function highlightElement(element: SlideElement) {
 			@mouseout.prevent="elementController?.drop"
 			@mousemove.prevent="elementController?.move"
 			:class="$style.canvas"
-			width="700"
-			height="400"
+			width="864"
+			height="486"
 			@click.prevent="(e) => handleCanvasClick(e)"
 		/>
 	</div>
@@ -207,8 +216,6 @@ function highlightElement(element: SlideElement) {
 }
 
 .canvas {
-	width: 700px;
-	height: 400px;
 	border: 1px solid var(--pt-light-grey);
 	border-radius: var(--pt-border-radius);
 	box-sizing: content-box;
