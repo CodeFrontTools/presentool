@@ -6,7 +6,10 @@ import BaseButton from '@/components/buttons/BaseButton.vue'
 import type { Slide } from '@/types'
 import { History } from '@/main'
 
-const props = defineProps<{ slides: Slide[]; currentSlideId: string | null }>()
+const props = defineProps<{
+	slides: Slide[]
+	currentSlideId: string | null
+}>()
 const emit = defineEmits<{ selectSlide: [slideId: string]; removeSlide: [slideId: string] }>()
 
 const slides = toRef(props, 'slides')
@@ -75,6 +78,7 @@ const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {
 				:slide-index="slide.id"
 				:slideNumber="index + 1"
 				:selected="currentSlideId === slide.id"
+				:slide="slide"
 				@mousedown="selectSlide(slide.id)"
 				draggable="true"
 				@dragstart="dragStart(index, $event)"
