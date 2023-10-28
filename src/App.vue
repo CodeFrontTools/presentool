@@ -8,31 +8,23 @@ import { onMounted, ref, type Ref } from 'vue'
 import { History } from '@/main'
 import Fullscreen from '@/components/FullscreenView/FullscreenView.vue'
 import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
+import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
 
-const slides: Ref<Slide[]> = ref([
-	{
-		id: '0',
-		elements: [
-			{ type: 'rectangle', area: { x: 0, y: 0, width: 100, height: 100 }, color: 'green' },
-			{ type: 'rectangle', area: { x: 10, y: 150, width: 110, height: 150 }, color: 'blue' },
-		],
-	},
-	{
-		id: '1',
-		elements: [
-			{ type: 'rectangle', area: { x: 300, y: 0, width: 100, height: 100 }, color: 'red' },
-			{ type: 'rectangle', area: { x: 50, y: 50, width: 150, height: 150 }, color: 'blue' },
-		],
-	},
-])
+const slides: Ref<Slide[]> = ref([])
 
 const currentSlideId: Ref<string | null> = ref(null)
 const currentSlideIndex: Ref<number> = ref(-1)
 
 onMounted(() => {
-	History.init(slides)
+	IndexedDBSlides.get('slides').then((res) => {
+		// @ts-ignore
+		slides.value = res.data || []
+		History.init(slides)
+	})
 	currentSlideIndex.value = 0
-	currentSlideId.value = slides.value[currentSlideIndex.value].id
+	if (slides.value[currentSlideIndex.value]) {
+		currentSlideId.value = slides.value[currentSlideIndex.value].id
+	}
 })
 
 const handleSelectSlide = (slideId: string) => {

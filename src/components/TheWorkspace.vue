@@ -105,7 +105,7 @@ const drawElements = () => {
 				element.area.height,
 			)
 		} else if (element.type === 'text') {
-			renderText(element.content, element.area.x, element.area.y, canvasContext)
+			renderText(element.content, element.area.x, element.area.y, canvasContext, FONT_SIZE)
 		}
 	}
 }
@@ -292,7 +292,7 @@ function saveTextEditor() {
 				}
 				slide.value?.elements.push(newSlideElement)
 
-				renderText(outputData, coordX, coordY, canvasContext)
+				renderText(outputData, coordX, coordY, canvasContext, FONT_SIZE)
 				textEditor.value.width = getTextWidth(outputData)
 				destroyTextEditor()
 				History.save()
@@ -342,7 +342,7 @@ function saveTextEditorOnEdit() {
 				element.area.width = editorWidth
 				element.area.height = editorHeight
 
-				renderText(outputData, coordX, coordY, canvasContext)
+				renderText(outputData, coordX, coordY, canvasContext, FONT_SIZE)
 				textEditor.value.width = getTextWidth(outputData)
 				destroyTextEditor()
 				History.save()
