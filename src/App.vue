@@ -9,8 +9,9 @@ import { History } from '@/main'
 import Fullscreen from '@/components/FullscreenView/FullscreenView.vue'
 import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
 import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
+import { INIT_SLIDES } from '@/components/constants'
 
-const slides: Ref<Slide[]> = ref([])
+const slides: Ref<Slide[]> = ref(INIT_SLIDES)
 
 const currentSlideId: Ref<string | null> = ref(null)
 const currentSlideIndex: Ref<number> = ref(-1)
@@ -18,7 +19,10 @@ const currentSlideIndex: Ref<number> = ref(-1)
 onMounted(() => {
 	IndexedDBSlides.get('slides').then((res) => {
 		// @ts-ignore
-		slides.value = res.data || []
+		if (res.data) {
+			// @ts-ignore
+			slides.value = res.data
+		}
 		History.init(slides)
 	})
 	currentSlideIndex.value = 0
