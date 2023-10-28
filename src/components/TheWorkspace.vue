@@ -27,9 +27,6 @@ watch(slide, () => {
 	initialize()
 })
 
-const TEXT_EDITOR_LEFT_PADDING = 10
-const TEXT_EDITOR_TOP_PADDING = 14
-
 // const scale = window.devicePixelRatio
 
 const highlightPoints: Ref<ElementArea[]> = ref([])
@@ -48,6 +45,11 @@ let textEditor: Ref<TextEditor> = ref({
 })
 let clickedTextIndex: number
 let elementController: ElementController | undefined
+
+const TEXT_EDITOR_LEFT_PADDING = 10
+const TEXT_EDITOR_TOP_PADDING = 14
+const FONT_SIZE = 18
+const FONT = `${FONT_SIZE}px 'Manrope', system-ui, 'SF Pro Display', Roboto, Oxygen, Arial, sans-serif`
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
@@ -302,17 +304,17 @@ function renderText(data: OutputData | null, x: number, y: number) {
 
 	let initY = y
 	canvasContext.fillStyle = '#383838'
-	canvasContext.font =
-		"400 18px 'Manrope', system-ui, 'SF Pro Display', Roboto, Oxygen, Arial, sans-serif"
+	canvasContext.font = `normal ${FONT}`
 	;(data as OutputData).blocks.forEach(({ type, data }) => {
 		if (type === 'paragraph') {
-			canvasContext.fillText(data.text, x, initY)
+			stylizeTextForCanvas(data.text, x, initY)
+			initY = initY + 43
 		} else if (type === 'list') {
 			data.items.forEach((item: { content: string }) => {
 				canvasContext.fillText(item.content, x, initY)
+				initY = initY + 38
 			})
 		}
-		initY = initY + 43
 	})
 }
 
@@ -390,6 +392,80 @@ function destroyTextEditor() {
 		textEditor.value.editorInstance?.destroy()
 	}
 }
+
+function stylizeTextForCanvas(text: string, x: number, y: number) {
+	let currentX = x
+	let currentY = y
+	let readingTag = false
+	let readingTagContent = false
+	let step = 1
+	const stack = new Array(text.length)
+
+	for (let i = 0; i < text.length; i += step) {
+		step = 1
+
+		if (readingTag) {
+			if (text[i] === '/') {
+				stack.pop()
+				readingTag = false
+			} else {
+				stack.push(text[i])
+				readingTag = false
+				readingTagContent = true
+			}
+
+			const closeTagIndex = text.substring(i).indexOf('>')
+			step = closeTagIndex
+
+			continue
+		}
+
+		if (readingTagContent) {
+			const currentTag = stack[stack.length - 1]
+			const style = ['bold', 'italic'].find((s) => s.match(currentTag))
+			if (style) {
+				canvasContext.font = `${style} ${FONT}`
+			}
+
+			const endContentIndex = text.slice(i).indexOf('<')
+			const content = text.slice(i).slice(1, endContentIndex)
+			canvasContext.fillText(content, currentX, currentY)
+			const { width: textWidth, fontBoundingBoxDescent: baseline } =
+				canvasContext.measureText(content)
+
+			if (!style) {
+				// numbers do not fit to any font size
+				switch (currentTag) {
+					case 'u':
+						canvasContext.fillRect(currentX, currentY + baseline - FONT_SIZE / 6, textWidth, 1)
+						break
+					case 's':
+						canvasContext.fillRect(currentX, currentY + FONT_SIZE / 2 - 1, textWidth, 1)
+						break
+
+					default:
+						break
+				}
+			}
+
+			currentX += canvasContext.measureText(content).width
+			step = content.length + 5 // 4 is the number of chars in a closing tag: </b>
+			canvasContext.font = `normal ${FONT}`
+			readingTagContent = false
+
+			continue
+		}
+
+		if (text[i] === '<') {
+			readingTag = true
+		} else {
+			canvasContext.fillText(text[i], currentX, currentY)
+			currentX += canvasContext.measureText(text[i]).width
+		}
+	}
+
+	return false
+}
 </script>
 
 <template>
@@ -414,6 +490,8 @@ function destroyTextEditor() {
 			top: textEditor.top + 'px',
 			left: textEditor.left + 'px',
 			width: textEditor.width + 'px',
+			'font-size': FONT_SIZE + 'px',
+			'padding-left': TEXT_EDITOR_LEFT_PADDING + 'px',
 		}"
 		@click.stop
 	/>
@@ -443,9 +521,7 @@ function destroyTextEditor() {
 	min-width: 80px;
 	max-width: 600px; /* вычислять нормально */
 	height: fit-content;
-	padding-left: 10px;
 	border: 1px solid #1a73e8;
-	font-size: 18px;
 }
 
 .editor_active {
