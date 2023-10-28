@@ -1,4 +1,4 @@
-import { font, FONT_SIZE } from '@/components/constants'
+import { font } from '@/components/constants'
 import { OutputData } from '@editorjs/editorjs'
 import { Slide } from '@/types'
 
