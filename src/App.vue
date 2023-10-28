@@ -48,10 +48,27 @@ const handleRemoveSlide = (slideId: string) => {
 	currentSlideIndex.value = 0
 	currentSlideId.value = slides.value[currentSlideIndex.value].id
 }
+
+const handleSlideBack = () => {
+	if (currentSlideIndex.value !== 0) {
+		currentSlideIndex.value--
+	}
+}
+
+const handleSlideNext = () => {
+	if (currentSlideIndex.value < slides.value.length) {
+		currentSlideIndex.value++
+	}
+}
 </script>
 
 <template>
-	<Fullscreen :slide="slides[currentSlideIndex]" v-if="isFullScreenMode" />
+	<Fullscreen
+		@back="handleSlideBack"
+		@next="handleSlideNext"
+		:slide="slides[currentSlideIndex]"
+		v-if="isFullScreenMode"
+	/>
 	<div v-else :class="$style.container">
 		<BaseHeader />
 		<div :class="$style.row">
