@@ -12,6 +12,7 @@ const props = defineProps<Omit<BaseButtonProps, 'variant'>>()
 		:action="props.action"
 		:icon-name="props.iconName"
 		:disabled="props.disabled"
+		:highlighted="props.highlighted"
 	/>
 </template>
 

@@ -7,7 +7,11 @@ defineProps<BaseButtonProps>()
 
 <template>
 	<button
-		:class="[$style['base-button'], $style[`base-button_${variant}`]]"
+		:class="[
+			$style['base-button'],
+			$style[`base-button_${variant}`],
+			highlighted ? $style['base-button_highlighted'] : '',
+		]"
 		:disabled="disabled"
 		@click="action"
 	>
@@ -45,6 +49,7 @@ defineProps<BaseButtonProps>()
 	fill: var(--pt-blue);
 }
 
+.base-button_highlighted,
 .base-button_light:not(:disabled):hover {
 	background-color: var(--pt-light-grey);
 }

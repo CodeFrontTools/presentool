@@ -2,7 +2,7 @@
 import ToolsButton from '@/components/ToolsPanel/ToolsButton.vue'
 import { History } from '@/main'
 import { type Ref, ref } from 'vue'
-import { handlersInjector } from '@/core/toolHandlers'
+import { injector } from '@/core/toolHandlers'
 const uploadInput: Ref<HTMLInputElement | null> = ref(null)
 
 const uploadImage = () => {
@@ -12,6 +12,7 @@ const uploadImage = () => {
 
 	uploadInput.value?.addEventListener('change', handleUploadInputChange)
 	uploadInput.value.click()
+	editTextFinish()
 }
 
 const handleUploadInputChange = () => {
@@ -21,8 +22,8 @@ const handleUploadInputChange = () => {
 
 	const files = uploadInput.value.files![0]
 
-	if (handlersInjector.value.addImage) {
-		handlersInjector.value.addImage(files)
+	if (injector.value.addImage) {
+		injector.value.addImage(files)
 	}
 
 	if (uploadInput.value) {
@@ -31,9 +32,18 @@ const handleUploadInputChange = () => {
 }
 
 const addRectangle = () => {
-	if (handlersInjector.value.addRectangle) {
-		handlersInjector.value.addRectangle()
+	if (injector.value.addRectangle) {
+		injector.value.addRectangle()
 	}
+	editTextFinish()
+}
+
+const editText = () => {
+	injector.value.isTextEdit = true
+}
+
+const editTextFinish = () => {
+	injector.value.isTextEdit = false
 }
 </script>
 
@@ -41,7 +51,7 @@ const addRectangle = () => {
 	<div :class="$style.toolsPanel">
 		<ToolsButton icon-name="arrow-left" :action="() => History.undo()" />
 		<ToolsButton icon-name="arrow-right" :action="() => History.redo()" />
-		<ToolsButton icon-name="font" :action="() => {}" />
+		<ToolsButton icon-name="font" :highlighted="injector.isTextEdit" :action="editText" />
 		<ToolsButton icon-name="image-tool" :action="uploadImage" />
 		<ToolsButton icon-name="copy" :action="addRectangle" />
 		<input ref="uploadInput" type="file" hidden />
