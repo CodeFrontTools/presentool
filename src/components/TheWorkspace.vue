@@ -169,6 +169,7 @@ const addRectangle = () => {
 	}
 	slide.value?.elements.push(newSlideElement)
 	drawElements()
+	History.save()
 }
 
 function handleCanvasClick(event: MouseEvent) {
@@ -294,6 +295,7 @@ function saveTextEditor() {
 				renderText(outputData, coordX, coordY, canvasContext)
 				textEditor.value.width = getTextWidth(outputData)
 				destroyTextEditor()
+				History.save()
 			})
 			.catch((error: Error) => {
 				console.log('Saving failed: ', error)
@@ -343,6 +345,7 @@ function saveTextEditorOnEdit() {
 				renderText(outputData, coordX, coordY, canvasContext)
 				textEditor.value.width = getTextWidth(outputData)
 				destroyTextEditor()
+				History.save()
 			})
 			.catch((error: Error) => {
 				console.log('Saving failed: ', error)
