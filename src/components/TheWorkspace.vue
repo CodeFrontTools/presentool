@@ -11,7 +11,7 @@ import type {
 } from '@/types'
 import { ElementController } from '@/components/ElementController/ElementController'
 import { History } from '@/main'
-import { handlersInjector } from '@/core/toolHandlers'
+import { injector } from '@/core/toolHandlers'
 import { createEditor } from '@/components/ElementController/Editor'
 import type { OutputData } from '@editorjs/editorjs'
 import { workspaceSizes } from '@/core/workspaceSizes'
@@ -53,8 +53,8 @@ onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
 	workspaceSizes.value.height = canvas.value.height
 	workspaceSizes.value.width = canvas.value.width
-	handlersInjector.value.addImage = addImage
-	handlersInjector.value.addRectangle = addRectangle
+	injector.value.addImage = addImage
+	injector.value.addRectangle = addRectangle
 	canvasRect = canvas.value.getBoundingClientRect()
 	initialize()
 	window.addEventListener('click', saveText)
@@ -191,17 +191,22 @@ function handleCanvasClick(event: MouseEvent) {
 			highlightElement(element)
 			saveText()
 			destroyTextEditor()
-			if (element.type === 'text') {
+			if (element.type === 'text' && injector.value.isTextEdit) {
 				editText(element, area.x + canvasRect.left, area.y + canvasRect.top)
 			}
 			return element
 		} else {
+			if (textEditor.value.active) {
+				saveText()
+			}
+			destroyTextEditor()
+
 			drawElements()
 		}
 	}
 
 	saveText()
-	!textEditor.value.active && addTextEditor(event.clientX, event.clientY)
+	injector.value.isTextEdit && addTextEditor(event.clientX, event.clientY)
 }
 
 function highlightElement(element: SlideElement) {
@@ -321,13 +326,13 @@ function editText(element: TextElement, x: number, y: number) {
 
 	drawElements()
 
-	textEditor.value.active = true
+	injector.value.isTextEdit = true
 	textEditor.value = {
 		editorInstance: createEditor('editor', content),
 		top: y - TEXT_EDITOR_TOP_PADDING,
 		left: x - TEXT_EDITOR_LEFT_PADDING,
-		active: true,
 		editing: true,
+		active: true,
 	}
 }
 
@@ -380,6 +385,7 @@ function destroyTextEditor() {
 	}
 
 	if ('destroy' in textEditor.value.editorInstance) {
+		injector.value.isTextEdit = false
 		textEditor.value.active = false
 		textEditor.value.editorInstance?.destroy()
 	}
