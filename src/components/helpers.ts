@@ -7,6 +7,7 @@ export const drawElements = (
 	canvasContext: CanvasRenderingContext2D,
 	slide: Slide,
 	scale: number = 1,
+	fontSize: number,
 ) => {
 	if (canvas === null || !slide) {
 		return
@@ -38,7 +39,13 @@ export const drawElements = (
 				element.area.height * scale,
 			)
 		} else if (element.type === 'text') {
-			renderText(element.content, element.area.x, element.area.y, canvasContext)
+			renderText(
+				element.content,
+				element.area.x * scale,
+				element.area.y * scale,
+				canvasContext,
+				fontSize,
+			)
 		}
 	}
 }
@@ -48,15 +55,16 @@ export function renderText(
 	x: number,
 	y: number,
 	canvasContext: CanvasRenderingContext2D,
+	fontSize: number,
 ) {
 	if (!data) return
 
 	let initY = y
 	canvasContext.fillStyle = '#383838'
-	canvasContext.font = `normal ${font(FONT_SIZE)}`
+	canvasContext.font = `normal ${font(fontSize)}`
 	;(data as OutputData).blocks.forEach(({ type, data }) => {
 		if (type === 'paragraph') {
-			stylizeTextForCanvas(data.text, x, initY, canvasContext, FONT_SIZE)
+			stylizeTextForCanvas(data.text, x, initY, canvasContext, fontSize)
 			initY = initY + 43
 		} else if (type === 'list') {
 			data.items.forEach((item: { content: string }) => {
@@ -75,7 +83,7 @@ export function stylizeTextForCanvas(
 	fontSize: number,
 ) {
 	let currentX = x
-	let currentY = y
+	const currentY = y
 	let readingTag = false
 	let readingTagContent = false
 	let step = 1

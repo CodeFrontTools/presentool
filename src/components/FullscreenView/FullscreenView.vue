@@ -12,7 +12,7 @@ const scale: Ref<number> = ref(0)
 const fontSize: Ref<number> = ref(0)
 
 watch(slide, () => {
-	drawElements(canvas.value, canvasContext, slide.value, scale.value)
+	drawElements(canvas.value, canvasContext, slide.value, scale.value, fontSize.value)
 })
 
 const keyHandler = (e: KeyboardEvent) => {
@@ -30,7 +30,7 @@ onMounted(() => {
 	canvas.value.width = screen.width
 	canvas.value.height = scale.value * workspaceSizes.value.height
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
-	drawElements(canvas.value, canvasContext, slide.value, scale.value)
+	drawElements(canvas.value, canvasContext, slide.value, scale.value, fontSize.value)
 	document.addEventListener('keydown', keyHandler)
 })
 
