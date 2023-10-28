@@ -16,6 +16,7 @@ import { createEditor } from '@/components/ElementController/Editor'
 import type { OutputData } from '@editorjs/editorjs'
 import { workspaceSizes } from '@/core/workspaceSizes'
 import { renderText } from '@/components/helpers'
+import { FONT_SIZE } from './constants'
 
 type WorkspaceProps = {
 	slide: Slide | undefined
@@ -50,7 +51,6 @@ let currentElementIndex: number | undefined
 
 const TEXT_EDITOR_LEFT_PADDING = 10
 const TEXT_EDITOR_TOP_PADDING = 14
-const FONT_SIZE = 18
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
