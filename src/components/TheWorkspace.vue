@@ -136,8 +136,8 @@ const deleteElements = () => {
 function addImage(file: File) {
 	if (!file) return
 
-	const canvasWidth: number = canvas.value.width
-	const canvasHeight: number = canvas.value.height
+	const canvasWidth: number = canvas.value.width / PIXEL_RATIO
+	const canvasHeight: number = canvas.value.height / PIXEL_RATIO
 
 	const image = new Image()
 	image.src = URL.createObjectURL(file)
@@ -161,7 +161,12 @@ function addImage(file: File) {
 
 		canvasContext?.drawImage(image, x, y, imageWidth, imageHeight)
 
-		const imageData = canvasContext?.getImageData(x, y, imageWidth, imageHeight)
+		const imageData = canvasContext?.getImageData(
+			x * PIXEL_RATIO,
+			y * PIXEL_RATIO,
+			imageWidth * PIXEL_RATIO,
+			imageHeight * PIXEL_RATIO,
+		)
 		const newSlideElement: ImageElement = {
 			type: 'image',
 			content: imageData,
