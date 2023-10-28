@@ -1,14 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import BaseInput from '../inputs/BaseInput.vue'
 import BaseIcon from '../BaseIcon.vue'
 import BaseButton from '@/components/buttons/BaseButton.vue'
 import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
+import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
 
 const presentationName = ref<string>('')
 
-function handlePresentationNameChange(name: string) {
-	presentationName.value = name.trim()
+onMounted(() => {
+	IndexedDBSlides.get('presentationName').then((result) => {
+		// @ts-ignore
+		if (result.data) {
+			// @ts-ignore
+			presentationName.value = result.data
+		}
+	})
+})
+
+function handlePresentationNameChange(e: Event) {
+	// @ts-ignore
+	presentationName.value = e.target?.value.trim()
+	IndexedDBSlides.set('presentationName', { data: presentationName.value })
 }
 
 function handleDownloadClick(e: Event) {
@@ -27,12 +40,14 @@ function handleShowSlidesClick() {
 <template>
 	<header :class="$style['header']">
 		<div :class="$style['wrapper']">
-			<BaseIcon name="logo" />
+			<div :class="$style.logoContainer">
+				<BaseIcon name="logo" />
+			</div>
 			<BaseInput
 				:placeholder="'Введите название'"
 				:value="presentationName"
 				:variant="'flat'"
-				:onChange="handlePresentationNameChange"
+				@onChange="handlePresentationNameChange"
 			/>
 		</div>
 		<div :class="$style['wrapper']">
@@ -56,5 +71,9 @@ function handleShowSlidesClick() {
 	display: flex;
 	align-items: center;
 	gap: 16px;
+}
+
+.logoContainer {
+	width: 200px;
 }
 </style>

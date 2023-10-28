@@ -1,12 +1,15 @@
 <script setup lang="ts">
 defineProps<{
-	onChange: (value: any) => void
 	disabled?: boolean
 	placeholder?: string
 	type?: string
 	value?: string
 	variant?: 'flat' | 'border'
 }>()
+const emit = defineEmits<{ onChange: [e: Event] }>()
+const onChangeHandler = (e: Event) => {
+	emit('onChange', e)
+}
 </script>
 
 <template>
@@ -16,7 +19,7 @@ defineProps<{
 		:placeholder="placeholder || ''"
 		:value="value"
 		:type="type || 'text'"
-		@click="onChange"
+		@input="onChangeHandler"
 	/>
 </template>
 
