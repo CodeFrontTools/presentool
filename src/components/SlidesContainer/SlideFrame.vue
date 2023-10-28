@@ -4,6 +4,7 @@ import type { Slide } from '@/types'
 import { drawElements } from '@/components/helpers'
 import { FONT_SIZE } from '@/components/constants'
 import BaseIcon from '../BaseIcon.vue'
+import { PIXEL_RATIO } from '@/core/canvasSize'
 
 type SlideItemProps = {
 	slideNumber: number
@@ -25,14 +26,27 @@ const scale = ref(0)
 const fontSize = ref(0)
 let canvasContext: CanvasRenderingContext2D
 
+const WIDTH = 157
+const HEIGHT = 92
+
 onMounted(() => {
-	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
-
 	const workspace = document.querySelector('#workspace')
-	const workspaceWidth = +getComputedStyle(workspace!).width.slice(0, -2)
 
-	scale.value = canvas.value.width / workspaceWidth
+	console.log(getComputedStyle(workspace!).width)
+	const workspaceWidth = 1728
+	// const workspaceWidth = +getComputedStyle(workspace!).width.slice(0, -2)
+	scale.value = (WIDTH / workspaceWidth) * PIXEL_RATIO
+
 	fontSize.value = FONT_SIZE * scale.value
+	canvas.value.width = WIDTH * PIXEL_RATIO
+	canvas.value.height = HEIGHT * PIXEL_RATIO
+
+	canvas.value.style.width = WIDTH + 'px'
+	canvas.value.style.height = HEIGHT + 'px'
+
+	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
+	canvasContext.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0)
+
 	drawElements(canvas.value, canvasContext, slide.value, scale.value, fontSize.value)
 })
 
@@ -58,7 +72,7 @@ watch(
 			</button>
 		</div>
 		<div :class="[$style.miniature, selected ? $style.selected : '']">
-			<canvas ref="canvas" :width="157" :height="92" :class="$style.miniCanvas" />
+			<canvas ref="canvas" :class="$style.miniCanvas" />
 		</div>
 	</div>
 </template>
@@ -90,7 +104,7 @@ watch(
 
 .miniature {
 	width: 157px;
-	height: 92px;
+	height: 88px;
 
 	display: flex;
 	align-items: center;

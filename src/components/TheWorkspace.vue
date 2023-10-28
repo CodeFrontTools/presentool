@@ -16,6 +16,7 @@ import { createEditor } from '@/components/ElementController/Editor'
 import type { OutputData } from '@editorjs/editorjs'
 import { workspaceSizes } from '@/core/workspaceSizes'
 import { renderText } from '@/components/helpers'
+import { PIXEL_RATIO } from '@/core/canvasSize'
 
 type WorkspaceProps = {
 	slide: Slide | undefined
@@ -27,8 +28,6 @@ const slide = toRef(props, 'slide')
 watch(slide, () => {
 	initialize()
 })
-
-// const scale = window.devicePixelRatio
 
 const highlightPoints: Ref<ElementArea[]> = ref([])
 
@@ -52,8 +51,16 @@ const TEXT_EDITOR_LEFT_PADDING = 10
 const TEXT_EDITOR_TOP_PADDING = 14
 const FONT_SIZE = 18
 
+const WIDTH = 864
+const HEIGHT = 486
+
 onMounted(() => {
+	canvas.value.height = HEIGHT * PIXEL_RATIO
+	canvas.value.width = WIDTH * PIXEL_RATIO
+	canvas.value.style.width = WIDTH + 'px'
+	canvas.value.style.height = HEIGHT + 'px'
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
+	canvasContext.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0)
 	workspaceSizes.value.height = canvas.value.height
 	workspaceSizes.value.width = canvas.value.width
 	injector.value.addImage = addImage
@@ -409,8 +416,6 @@ function destroyTextEditor() {
 			@mouseout.prevent="elementController?.drop"
 			@mousemove.prevent="elementController?.move"
 			:class="$style.canvas"
-			:width="864"
-			:height="486"
 			@click.prevent.stop="(e) => handleCanvasClick(e)"
 		/>
 	</div>
