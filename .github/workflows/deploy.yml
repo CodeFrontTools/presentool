@@ -6,7 +6,7 @@ permissions:
 on:
   push:
     branches:
-      - PT-deploy-script
+      - main
 
 jobs:
   build-and-deploy:
