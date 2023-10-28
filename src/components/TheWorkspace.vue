@@ -15,6 +15,7 @@ import { injector } from '@/core/toolHandlers'
 import { createEditor } from '@/components/ElementController/Editor'
 import type { OutputData } from '@editorjs/editorjs'
 import { workspaceSizes } from '@/core/workspaceSizes'
+import { renderText } from '@/components/helpers'
 
 type WorkspaceProps = {
 	slide: Slide | undefined
@@ -104,7 +105,7 @@ const drawElements = () => {
 				element.area.height,
 			)
 		} else if (element.type === 'text') {
-			renderText(element.content, element.area.x, element.area.y)
+			renderText(element.content, element.area.x, element.area.y, canvasContext)
 		}
 	}
 }
@@ -290,32 +291,13 @@ function saveTextEditor() {
 				}
 				slide.value?.elements.push(newSlideElement)
 
-				renderText(outputData, coordX, coordY)
+				renderText(outputData, coordX, coordY, canvasContext)
 				textEditor.value.width = getTextWidth(outputData)
 				destroyTextEditor()
 			})
 			.catch((error: Error) => {
 				console.log('Saving failed: ', error)
 			})
-}
-
-function renderText(data: OutputData | null, x: number, y: number) {
-	if (!data) return
-
-	let initY = y
-	canvasContext.fillStyle = '#383838'
-	canvasContext.font = `normal ${FONT}`
-	;(data as OutputData).blocks.forEach(({ type, data }) => {
-		if (type === 'paragraph') {
-			stylizeTextForCanvas(data.text, x, initY)
-			initY = initY + 43
-		} else if (type === 'list') {
-			data.items.forEach((item: { content: string }) => {
-				canvasContext.fillText(item.content, x, initY)
-				initY = initY + 38
-			})
-		}
-	})
 }
 
 function editText(element: TextElement, x: number, y: number) {
@@ -358,7 +340,7 @@ function saveTextEditorOnEdit() {
 				element.area.width = editorWidth
 				element.area.height = editorHeight
 
-				renderText(outputData, coordX, coordY)
+				renderText(outputData, coordX, coordY, canvasContext)
 				textEditor.value.width = getTextWidth(outputData)
 				destroyTextEditor()
 			})
@@ -391,80 +373,6 @@ function destroyTextEditor() {
 		textEditor.value.active = false
 		textEditor.value.editorInstance?.destroy()
 	}
-}
-
-function stylizeTextForCanvas(text: string, x: number, y: number) {
-	let currentX = x
-	let currentY = y
-	let readingTag = false
-	let readingTagContent = false
-	let step = 1
-	const stack = new Array(text.length)
-
-	for (let i = 0; i < text.length; i += step) {
-		step = 1
-
-		if (readingTag) {
-			if (text[i] === '/') {
-				stack.pop()
-				readingTag = false
-			} else {
-				stack.push(text[i])
-				readingTag = false
-				readingTagContent = true
-			}
-
-			const closeTagIndex = text.substring(i).indexOf('>')
-			step = closeTagIndex
-
-			continue
-		}
-
-		if (readingTagContent) {
-			const currentTag = stack[stack.length - 1]
-			const style = ['bold', 'italic'].find((s) => s.match(currentTag))
-			if (style) {
-				canvasContext.font = `${style} ${FONT}`
-			}
-
-			const endContentIndex = text.slice(i).indexOf('<')
-			const content = text.slice(i).slice(1, endContentIndex)
-			canvasContext.fillText(content, currentX, currentY)
-			const { width: textWidth, fontBoundingBoxDescent: baseline } =
-				canvasContext.measureText(content)
-
-			if (!style) {
-				// numbers do not fit to any font size
-				switch (currentTag) {
-					case 'u':
-						canvasContext.fillRect(currentX, currentY + baseline - FONT_SIZE / 6, textWidth, 1)
-						break
-					case 's':
-						canvasContext.fillRect(currentX, currentY + FONT_SIZE / 2 - 1, textWidth, 1)
-						break
-
-					default:
-						break
-				}
-			}
-
-			currentX += canvasContext.measureText(content).width
-			step = content.length + 5 // 4 is the number of chars in a closing tag: </b>
-			canvasContext.font = `normal ${FONT}`
-			readingTagContent = false
-
-			continue
-		}
-
-		if (text[i] === '<') {
-			readingTag = true
-		} else {
-			canvasContext.fillText(text[i], currentX, currentY)
-			currentX += canvasContext.measureText(text[i]).width
-		}
-	}
-
-	return false
 }
 </script>
 
