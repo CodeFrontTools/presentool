@@ -1,4 +1,4 @@
-import { font } from '@/components/constants'
+import { font, FONT_SIZE_DICT } from '@/components/constants'
 import { OutputData } from '@editorjs/editorjs'
 import { Slide } from '@/types'
 
@@ -64,6 +64,7 @@ export function renderText(
 	canvasContext.font = `normal ${font(fontSize)}`
 	;(data as OutputData).blocks.forEach(({ type, data }) => {
 		if (type === 'paragraph') {
+			console.log(data.text)
 			stylizeTextForCanvas(data.text, x, initY, canvasContext, fontSize)
 			initY = initY + 43
 		} else if (type === 'list') {
@@ -87,22 +88,32 @@ export function stylizeTextForCanvas(
 	let readingTag = false
 	let readingTagContent = false
 	let step = 1
+	let fontSizeId: number
 	const stack = new Array(text.length)
 
 	for (let i = 0; i < text.length; i += step) {
 		step = 1
 
 		if (readingTag) {
+			const closeTagIndex = text.substring(i).indexOf('>')
+
 			if (text[i] === '/') {
 				stack.pop()
 				readingTag = false
 			} else {
-				stack.push(text[i])
+				if (text[i] === 'f') {
+					stack.push('font')
+					fontSizeId = +text
+						.slice(i)
+						.slice(1, closeTagIndex)
+						.match(/size="(\d)"/)![1]
+				} else {
+					stack.push(text[i])
+				}
 				readingTag = false
 				readingTagContent = true
 			}
 
-			const closeTagIndex = text.substring(i).indexOf('>')
 			step = closeTagIndex
 
 			continue
@@ -110,10 +121,14 @@ export function stylizeTextForCanvas(
 
 		if (readingTagContent) {
 			const currentTag = stack[stack.length - 1]
-			const style = ['bold', 'italic'].find((s) => s.match(currentTag))
-			if (style) {
-				canvasContext.font = `${style} ${font(fontSize)}`
+			const style = ['bold', 'italic', 'font'].find((s) => s.match(currentTag))
+			// @ts-ignore
+			if (typeof fontSizeId !== 'undefined') {
+				fontSize = FONT_SIZE_DICT[fontSizeId - 1]
 			}
+			console.log(fontSize)
+			canvasContext.font = `${style} ${font(fontSize)}`
+			console.log(canvasContext.font)
 
 			const endContentIndex = text.slice(i).indexOf('<')
 			const content = text.slice(i).slice(1, endContentIndex)
@@ -137,7 +152,9 @@ export function stylizeTextForCanvas(
 			}
 
 			currentX += canvasContext.measureText(content).width
-			step = content.length + 5 // 4 is the number of chars in a closing tag: </b>
+			// @ts-ignore
+			const closingTagChars = fontSizeId ? 8 : 5
+			step = content.length + closingTagChars // 4 is the number of chars in a closing tag: </b>
 			canvasContext.font = `normal ${font(fontSize)}`
 			readingTagContent = false
 
