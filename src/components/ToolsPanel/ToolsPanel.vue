@@ -51,6 +51,7 @@ const editTextFinish = () => {
 	<div :class="$style.toolsPanel">
 		<ToolsButton icon-name="arrow-left" :action="() => History.undo()" />
 		<ToolsButton icon-name="arrow-right" :action="() => History.redo()" />
+		<div :class="$style.delimiter" />
 		<ToolsButton icon-name="font" :highlighted="injector.isTextEdit" :action="editText" />
 		<ToolsButton icon-name="image-tool" :action="uploadImage" />
 		<ToolsButton icon-name="copy" :action="addRectangle" />
@@ -63,8 +64,15 @@ const editTextFinish = () => {
 	display: flex;
 	align-items: center;
 	height: 32px;
-	padding-left: 4px;
+	padding: 5px 12px;
 	background-color: var(--pt-lighter-grey);
 	border-radius: var(--pt-border-radius);
+}
+
+.delimiter {
+	width: 1px;
+	height: 16px;
+	margin: 0 10px;
+	background-color: #bababa;
 }
 </style>
