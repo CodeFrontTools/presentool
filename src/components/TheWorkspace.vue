@@ -50,7 +50,6 @@ let elementController: ElementController | undefined
 const TEXT_EDITOR_LEFT_PADDING = 10
 const TEXT_EDITOR_TOP_PADDING = 14
 const FONT_SIZE = 18
-const FONT = `${FONT_SIZE}px 'Manrope', system-ui, 'SF Pro Display', Roboto, Oxygen, Arial, sans-serif`
 
 onMounted(() => {
 	canvasContext = canvas.value.getContext('2d', { willReadFrequently: true })
@@ -383,6 +382,7 @@ function destroyTextEditor() {
 	<div :class="$style.container">
 		<canvas
 			ref="canvas"
+			id="workspace"
 			@mousedown.prevent="elementController?.drag"
 			@mouseup.prevent="elementController?.drop"
 			@mouseout.prevent="elementController?.drop"
