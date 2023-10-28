@@ -46,6 +46,7 @@ let textEditor: Ref<TextEditor> = ref({
 })
 let clickedTextIndex: number
 let elementController: ElementController | undefined
+let currentElementIndex: number | undefined
 
 const TEXT_EDITOR_LEFT_PADDING = 10
 const TEXT_EDITOR_TOP_PADDING = 14
@@ -57,6 +58,7 @@ onMounted(() => {
 	workspaceSizes.value.width = canvas.value.width
 	injector.value.addImage = addImage
 	injector.value.addRectangle = addRectangle
+	injector.value.deleteElement = deleteElements
 	canvasRect = canvas.value.getBoundingClientRect()
 	initialize()
 	window.addEventListener('click', saveText)
@@ -71,6 +73,8 @@ const initialize = () => {
 		drawElements,
 	)
 	drawElements()
+	injector.value.isDeleteElement = false
+	currentElementIndex = undefined
 }
 
 const drawElements = () => {
@@ -107,6 +111,19 @@ const drawElements = () => {
 			renderText(element.content, element.area.x, element.area.y, canvasContext, FONT_SIZE)
 		}
 	}
+}
+
+const deleteElements = () => {
+	if (currentElementIndex != null) {
+		slide.value?.elements.splice(currentElementIndex, 1)
+		drawElements()
+	} else {
+		console.error('currentElementIndex not found')
+	}
+
+	currentElementIndex = undefined
+	injector.value.isDeleteElement = false
+	History.save()
 }
 
 function addImage(file: File) {
@@ -197,12 +214,16 @@ function handleCanvasClick(event: MouseEvent) {
 			if (element.type === 'text' && injector.value.isTextEdit) {
 				editText(element, area.x + canvasRect.left, area.y + canvasRect.top)
 			}
+			currentElementIndex = i
+			injector.value.isDeleteElement = true
 			return element
 		} else {
 			if (textEditor.value.active) {
 				saveText()
 			}
 			destroyTextEditor()
+			currentElementIndex = undefined
+			injector.value.isDeleteElement = false
 
 			drawElements()
 		}
