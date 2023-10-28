@@ -19,7 +19,7 @@ const currentSlideIndex: Ref<number> = ref(-1)
 onMounted(() => {
 	IndexedDBSlides.get('slides').then((res) => {
 		// @ts-ignore
-		if (res.data) {
+		if (res?.data) {
 			// @ts-ignore
 			slides.value = res.data
 		}
