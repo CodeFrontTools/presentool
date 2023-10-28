@@ -1,5 +1,6 @@
 import { type Ref, ref } from 'vue'
 import { deepCopy } from '@/core/helpers/deepCopy'
+import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
 
 type HistoryOptions = {
 	limit?: number
@@ -47,12 +48,14 @@ export class HistoryManager<T> {
 
 		this.#historyStack.push(deepCopy(savedValue.value))
 		this.#currentHistoryIndex = this.#historyStack.length - 1
+		IndexedDBSlides.set('slides', { id: 'slides', data: deepCopy(savedValue.value) })
 	}
 
 	undo() {
 		if (this.canUndo) {
 			this.#currentHistoryIndex--
 			this.#currentState.value = deepCopy(this.#historyStack[this.#currentHistoryIndex])
+			IndexedDBSlides.set('slides', { id: 'slides', data: deepCopy(this.#currentState.value) })
 		}
 	}
 
@@ -60,6 +63,7 @@ export class HistoryManager<T> {
 		if (this.canRedo) {
 			this.#currentHistoryIndex++
 			this.#currentState.value = deepCopy(this.#historyStack[this.#currentHistoryIndex])
+			IndexedDBSlides.set('slides', { id: 'slides', data: deepCopy(this.#currentState.value) })
 		}
 	}
 
