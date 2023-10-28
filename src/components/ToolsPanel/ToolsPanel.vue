@@ -45,6 +45,12 @@ const editText = () => {
 const editTextFinish = () => {
 	injector.value.isTextEdit = false
 }
+
+const deleteElement = () => {
+	if (injector.value.deleteElement) {
+		injector.value.deleteElement()
+	}
+}
 </script>
 
 <template>
@@ -56,6 +62,7 @@ const editTextFinish = () => {
 		<ToolsButton icon-name="image-tool" :action="uploadImage" />
 		<ToolsButton icon-name="copy" :action="addRectangle" />
 		<input ref="uploadInput" type="file" hidden />
+		<ToolsButton v-if="injector.isDeleteElement" icon-name="remove-18px" :action="deleteElement" />
 	</div>
 </template>
 
