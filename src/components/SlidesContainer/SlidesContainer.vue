@@ -4,6 +4,7 @@ import SlideFrame from '@/components/SlidesContainer/SlideFrame.vue'
 import { generateId } from '@/components/SlidesContainer/helpers'
 import BaseButton from '@/components/buttons/BaseButton.vue'
 import type { Slide } from '@/types'
+import { History } from '@/main'
 
 const props = defineProps<{ slides: Slide[]; currentSlideId: string | null }>()
 const emit = defineEmits<{ selectSlide: [slideId: string]; removeSlide: [slideId: string] }>()
@@ -16,6 +17,7 @@ function selectSlide(slideId: string) {
 
 function addSlide() {
 	slides.value.push({ id: generateId(), elements: [] })
+	History.save()
 }
 
 const removeSlide = (slideId: string) => {
@@ -51,6 +53,7 @@ const moveItem = (from: number, to: number) => {
 	if (to === -1) return
 
 	slides.value.splice(to, 0, slides.value.splice(from, 1)[0])
+	History.save()
 }
 
 const dragFinish = (to: number, evt: { target: HTMLInputElement }) => {

@@ -47,6 +47,7 @@ const handleRemoveSlide = (slideId: string) => {
 
 	currentSlideIndex.value = 0
 	currentSlideId.value = slides.value[currentSlideIndex.value].id
+	History.save()
 }
 
 const handleSlideBack = () => {
