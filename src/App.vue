@@ -10,6 +10,7 @@ import Fullscreen from '@/components/FullscreenView/FullscreenView.vue'
 import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
 import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
 import { INIT_SLIDES } from '@/components/constants'
+import { getFromJson } from '@/components/header/enocode-decode-slides'
 
 const slides: Ref<Slide[]> = ref(INIT_SLIDES)
 
@@ -20,8 +21,9 @@ onMounted(() => {
 	IndexedDBSlides.get('slides').then((res) => {
 		// @ts-ignore
 		if (res?.data) {
-			// @ts-ignore
-			slides.value = res.data
+			slides.value = (res as { data: Slide[] }).data
+		} else {
+			getFromJson()
 		}
 		History.init(slides)
 	})

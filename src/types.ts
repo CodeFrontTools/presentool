@@ -1,5 +1,9 @@
 import EditorJS, { type OutputData } from '@editorjs/editorjs'
 
+export type EncodedSlide = { elements: EncodedSlideElement[] } & Omit<Slide, 'elements'>
+type EncodedSlideElement = EncodedImageElement | TextElement | RectangleElement
+type EncodedImageElement = { content: string } & Omit<ImageElement, 'content'>
+
 export type Slide = {
 	id: string
 	elements: Array<SlideElement>

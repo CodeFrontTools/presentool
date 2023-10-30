@@ -5,6 +5,8 @@ import BaseIcon from '../BaseIcon.vue'
 import BaseButton from '@/components/buttons/BaseButton.vue'
 import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
 import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
+import { Slide } from '@/types'
+import { decode, encode, saveToJson } from '@/components/header/enocode-decode-slides'
 
 const presentationName = ref<string>('')
 
@@ -24,8 +26,15 @@ function handlePresentationNameChange(e: Event) {
 	IndexedDBSlides.set('presentationName', { data: presentationName.value })
 }
 
-function handleDownloadClick(e: Event) {
-	console.log('[ handleDownloadClick ] e: ', e)
+function handleDownloadClick() {
+	IndexedDBSlides.get('slides').then((res) => {
+		const encodedData = encode((res as { data: Slide[] }).data)
+		const decodedData = decode(encodedData)
+
+		console.log('decodedData', decodedData)
+
+		saveToJson(encodedData)
+	})
 }
 
 function handleShowSlidesClick() {
