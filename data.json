@@ -1,1 +1,270 @@
-[{"elements":[{"content":"public/images/image200900.png","type":"image","area":{"x":229,"y":184.7787610619469,"width":390,"height":94.44247787610618}}],"id":"1"},{"elements":[{"type":"text","content":{"time":1699221530951,"blocks":[{"id":"xxPdF-7-Zc","type":"paragraph","data":{"text":"<b>Team</b>"}}],"version":"2.28.2"},"area":{"x":41,"y":44.5,"width":108.695,"height":45.1875}},{"content":"public/images/image388686.png","type":"image","area":{"x":90,"y":110,"width":130,"height":166}},{"content":"public/images/image170524.png","type":"image","area":{"x":352,"y":111,"width":138,"height":161}},{"content":"public/images/image979726.png","type":"image","area":{"x":608,"y":108,"width":131,"height":175}},{"content":"public/images/image80246.png","type":"image","area":{"x":471,"y":280,"width":150,"height":170}},{"content":"public/images/image866124.png","type":"image","area":{"x":199,"y":285,"width":134,"height":166}}],"id":"869564684"},{"elements":[{"type":"text","content":{"time":1699220301720,"blocks":[{"id":"gMQaVfQYeE","type":"paragraph","data":{"text":"<b>About technologies</b>"}}],"version":"2.28.2"},"area":{"x":41,"y":43.5,"width":233.836,"height":45.1875}},{"content":"public/images/image537175.png","type":"image","area":{"x":155,"y":200,"width":97,"height":83}},{"content":"public/images/image234085.png","type":"image","area":{"x":376,"y":204,"width":79,"height":78}},{"content":"public/images/image346545.png","type":"image","area":{"x":583,"y":188,"width":107,"height":96}},{"type":"text","content":{"time":1699220002684,"blocks":[{"id":"Phh3453LHv","type":"paragraph","data":{"text":"Vue"}}],"version":"2.28.2"},"area":{"x":190,"y":309.5,"width":93.5469,"height":45.1875}},{"type":"text","content":{"time":1699220013409,"blocks":[{"id":"99F3IZwMe_","type":"paragraph","data":{"text":"TypeScript"}}],"version":"2.28.2"},"area":{"x":372,"y":308.5,"width":151.773,"height":45.1875}},{"type":"text","content":{"time":1699220075803,"blocks":[{"id":"nHshtl_zHx","type":"paragraph","data":{"text":"Own solutions"}}],"version":"2.28.2"},"area":{"x":583,"y":307.5,"width":141.32,"height":45.1875}}],"id":"594048250"},{"elements":[{"type":"text","content":{"time":1699220235040,"blocks":[{"id":"N0l4MTqj-Q","type":"paragraph","data":{"text":"<b>Development process</b>"}}],"version":"2.28.2"},"area":{"x":38,"y":40.5,"width":251.688,"height":45.1875}},{"content":"public/images/image479638.png","type":"image","area":{"x":-3,"y":103.74942352036894,"width":864,"height":388.50115295926213}}],"id":"369374283"},{"elements":[{"content":"public/images/image85222.png","type":"image","area":{"x":122.96610169491527,"y":101,"width":590.0677966101695,"height":344}},{"type":"text","content":{"time":1699220726707,"blocks":[{"id":"O8hATXUSbo","type":"paragraph","data":{"text":"<b>Analysis of existing applications</b>"}}],"version":"2.28.2"},"area":{"x":40,"y":40.5,"width":342.727,"height":45.1875}}],"id":"758485709"},{"elements":[{"content":"public/images/image987310.png","type":"image","area":{"x":1,"y":93,"width":864,"height":368}},{"type":"text","content":{"time":1699220881315,"blocks":[{"id":"whfdco3KOb","type":"paragraph","data":{"text":"<b>Design</b>"}}],"version":"2.28.2"},"area":{"x":42,"y":43.5,"width":122.586,"height":45.1875}}],"id":"38262308"},{"elements":[{"type":"text","content":{"time":1699220974322,"blocks":[{"id":"lwpLHKyg47","type":"paragraph","data":{"text":"<b>IndexedDB Storage Manager</b>"}}],"version":"2.28.2"},"area":{"x":41,"y":44.5,"width":308.484,"height":45.1875}},{"content":"public/images/image255379.png","type":"image","area":{"x":0.9999999999999432,"y":84.52071005917159,"width":864.0000000000001,"height":378.9585798816568}}],"id":"650258810"},{"elements":[{"content":"public/images/image703420.png","type":"image","area":{"x":39,"y":99.23529411764707,"width":469,"height":197.52941176470586}},{"content":"public/images/image825032.png","type":"image","area":{"x":272,"y":277.21331689272506,"width":560,"height":154.57336621454994}},{"type":"text","content":{"time":1699221462458,"blocks":[{"id":"enFwUji1dp","type":"paragraph","data":{"text":"<b>HistoryManager</b>"}}],"version":"2.28.2"},"area":{"x":41,"y":43.5,"width":201.672,"height":45.1875}}],"id":"336898701"},{"elements":[{"content":"public/images/image766429.png","type":"image","area":{"x":577.5241635687732,"y":80,"width":222.95167286245356,"height":328}},{"content":"public/images/image150301.png","type":"image","area":{"x":56,"y":132.85498489425981,"width":475,"height":247.29003021148037}},{"type":"text","content":{"time":1699221204173,"blocks":[{"id":"XD-chl-kN0","type":"paragraph","data":{"text":"<b>Workspace</b>"}}],"version":"2.28.2"},"area":{"x":40,"y":43.5,"width":158.438,"height":45.1875}}],"id":"191947734"}]
+[
+  {
+    "elements": [
+      {
+        "content": "images/image200900.png",
+        "type": "image",
+        "area": { "x": 229, "y": 184.7787610619469, "width": 390, "height": 94.44247787610618 }
+      }
+    ],
+    "id": "1"
+  },
+  {
+    "elements": [
+      {
+        "type": "text",
+        "content": {
+          "time": 1699221530951,
+          "blocks": [
+            { "id": "xxPdF-7-Zc", "type": "paragraph", "data": { "text": "<b>Team</b>" } }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 41, "y": 44.5, "width": 108.695, "height": 45.1875 }
+      },
+      {
+        "content": "images/image388686.png",
+        "type": "image",
+        "area": { "x": 90, "y": 110, "width": 130, "height": 166 }
+      },
+      {
+        "content": "images/image170524.png",
+        "type": "image",
+        "area": { "x": 352, "y": 111, "width": 138, "height": 161 }
+      },
+      {
+        "content": "images/image979726.png",
+        "type": "image",
+        "area": { "x": 608, "y": 108, "width": 131, "height": 175 }
+      },
+      {
+        "content": "images/image80246.png",
+        "type": "image",
+        "area": { "x": 471, "y": 280, "width": 150, "height": 170 }
+      },
+      {
+        "content": "images/image866124.png",
+        "type": "image",
+        "area": { "x": 199, "y": 285, "width": 134, "height": 166 }
+      }
+    ],
+    "id": "869564684"
+  },
+  {
+    "elements": [
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220301720,
+          "blocks": [
+            {
+              "id": "gMQaVfQYeE",
+              "type": "paragraph",
+              "data": { "text": "<b>About technologies</b>" }
+            }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 41, "y": 43.5, "width": 233.836, "height": 45.1875 }
+      },
+      {
+        "content": "images/image537175.png",
+        "type": "image",
+        "area": { "x": 155, "y": 200, "width": 97, "height": 83 }
+      },
+      {
+        "content": "images/image234085.png",
+        "type": "image",
+        "area": { "x": 376, "y": 204, "width": 79, "height": 78 }
+      },
+      {
+        "content": "images/image346545.png",
+        "type": "image",
+        "area": { "x": 583, "y": 188, "width": 107, "height": 96 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220002684,
+          "blocks": [{ "id": "Phh3453LHv", "type": "paragraph", "data": { "text": "Vue" } }],
+          "version": "2.28.2"
+        },
+        "area": { "x": 190, "y": 309.5, "width": 93.5469, "height": 45.1875 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220013409,
+          "blocks": [{ "id": "99F3IZwMe_", "type": "paragraph", "data": { "text": "TypeScript" } }],
+          "version": "2.28.2"
+        },
+        "area": { "x": 372, "y": 308.5, "width": 151.773, "height": 45.1875 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220075803,
+          "blocks": [
+            { "id": "nHshtl_zHx", "type": "paragraph", "data": { "text": "Own solutions" } }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 583, "y": 307.5, "width": 141.32, "height": 45.1875 }
+      }
+    ],
+    "id": "594048250"
+  },
+  {
+    "elements": [
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220235040,
+          "blocks": [
+            {
+              "id": "N0l4MTqj-Q",
+              "type": "paragraph",
+              "data": { "text": "<b>Development process</b>" }
+            }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 38, "y": 40.5, "width": 251.688, "height": 45.1875 }
+      },
+      {
+        "content": "images/image479638.png",
+        "type": "image",
+        "area": { "x": -3, "y": 103.74942352036894, "width": 864, "height": 388.50115295926213 }
+      }
+    ],
+    "id": "369374283"
+  },
+  {
+    "elements": [
+      {
+        "content": "images/image85222.png",
+        "type": "image",
+        "area": { "x": 122.96610169491527, "y": 101, "width": 590.0677966101695, "height": 344 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220726707,
+          "blocks": [
+            {
+              "id": "O8hATXUSbo",
+              "type": "paragraph",
+              "data": { "text": "<b>Analysis of existing applications</b>" }
+            }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 40, "y": 40.5, "width": 342.727, "height": 45.1875 }
+      }
+    ],
+    "id": "758485709"
+  },
+  {
+    "elements": [
+      {
+        "content": "images/image987310.png",
+        "type": "image",
+        "area": { "x": 1, "y": 93, "width": 864, "height": 368 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220881315,
+          "blocks": [
+            { "id": "whfdco3KOb", "type": "paragraph", "data": { "text": "<b>Design</b>" } }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 42, "y": 43.5, "width": 122.586, "height": 45.1875 }
+      }
+    ],
+    "id": "38262308"
+  },
+  {
+    "elements": [
+      {
+        "type": "text",
+        "content": {
+          "time": 1699220974322,
+          "blocks": [
+            {
+              "id": "lwpLHKyg47",
+              "type": "paragraph",
+              "data": { "text": "<b>IndexedDB Storage Manager</b>" }
+            }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 41, "y": 44.5, "width": 308.484, "height": 45.1875 }
+      },
+      {
+        "content": "images/image255379.png",
+        "type": "image",
+        "area": {
+          "x": 0.9999999999999432,
+          "y": 84.52071005917159,
+          "width": 864.0000000000001,
+          "height": 378.9585798816568
+        }
+      }
+    ],
+    "id": "650258810"
+  },
+  {
+    "elements": [
+      {
+        "content": "images/image703420.png",
+        "type": "image",
+        "area": { "x": 39, "y": 99.23529411764707, "width": 469, "height": 197.52941176470586 }
+      },
+      {
+        "content": "images/image825032.png",
+        "type": "image",
+        "area": { "x": 272, "y": 277.21331689272506, "width": 560, "height": 154.57336621454994 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699221462458,
+          "blocks": [
+            { "id": "enFwUji1dp", "type": "paragraph", "data": { "text": "<b>HistoryManager</b>" } }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 41, "y": 43.5, "width": 201.672, "height": 45.1875 }
+      }
+    ],
+    "id": "336898701"
+  },
+  {
+    "elements": [
+      {
+        "content": "images/image766429.png",
+        "type": "image",
+        "area": { "x": 577.5241635687732, "y": 80, "width": 222.95167286245356, "height": 328 }
+      },
+      {
+        "content": "images/image150301.png",
+        "type": "image",
+        "area": { "x": 56, "y": 132.85498489425981, "width": 475, "height": 247.29003021148037 }
+      },
+      {
+        "type": "text",
+        "content": {
+          "time": 1699221204173,
+          "blocks": [
+            { "id": "XD-chl-kN0", "type": "paragraph", "data": { "text": "<b>Workspace</b>" } }
+          ],
+          "version": "2.28.2"
+        },
+        "area": { "x": 40, "y": 43.5, "width": 158.438, "height": 45.1875 }
+      }
+    ],
+    "id": "191947734"
+  }
+]
