@@ -10,7 +10,7 @@ import Fullscreen from '@/components/FullscreenView/FullscreenView.vue'
 import { isFullScreenMode } from '@/components/FullscreenView/fullscreenState'
 import { IndexedDBSlides } from '@/core/indexed-db/indexed-db'
 import { INIT_SLIDES } from '@/components/constants'
-import { getFromJson } from '@/components/header/enocode-decode-slides'
+import { getFromJson, restoreConfig } from '@/components/header/helpers'
 
 const slides: Ref<Slide[]> = ref(INIT_SLIDES)
 
@@ -18,12 +18,13 @@ const currentSlideId: Ref<string | null> = ref(null)
 const currentSlideIndex: Ref<number> = ref(-1)
 
 onMounted(() => {
-	IndexedDBSlides.get('slides').then((res) => {
+	IndexedDBSlides.get('slides').then(async (res) => {
 		// @ts-ignore
 		if (res?.data) {
 			slides.value = (res as { data: Slide[] }).data
 		} else {
-			getFromJson()
+			const json = await getFromJson()
+			slides.value = await restoreConfig(json)
 		}
 		History.init(slides)
 	})
