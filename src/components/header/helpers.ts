@@ -15,7 +15,7 @@ export const saveToJson = (json: any) => {
 }
 
 export const getFromJson = async () => {
-	const response = await fetch(`${window.location.href}public/data.json`)
+	const response = await fetch(`${window.location.href}/data.json`)
 	return response.json()
 }
 
@@ -57,7 +57,7 @@ export const formatConfig = (slides: Slide[]): EncodedSlide[] => {
 					saveImageData(imageData, fileName)
 				}, 1000)
 
-				return { content: `public/images/${fileName}.png`, ...restProp }
+				return { content: `images/${fileName}.png`, ...restProp }
 			}
 
 			return element
